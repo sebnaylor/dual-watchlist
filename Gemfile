@@ -50,6 +50,13 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
+  gem 'rubocop'
+  gem 'rubocop-rspec'
+  gem 'rubocop-rails'
+  gem 'rubocop-performance'
+  gem 'rubocop-rake'
+  gem 'ruby-lsp'
+  gem 'ruby-lsp-rails'
 end
 
 group :test do
@@ -57,3 +64,5 @@ group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
 end
+
+gem "devise", "~> 4.9"
