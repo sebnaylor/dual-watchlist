@@ -57,6 +57,7 @@ group :development do
   gem 'rubocop-rake'
   gem 'ruby-lsp'
   gem 'ruby-lsp-rails'
+  gem 'pry-remote'
 end
 
 group :test do
