@@ -27,3 +27,6 @@ module DualWatchlist
     # config.eager_load_paths << Rails.root.join("extras")
   end
 end
+
+# Load .env file in development and test environments
+Dotenv::Railtie.load if Rails.env.development? || Rails.env.test?
