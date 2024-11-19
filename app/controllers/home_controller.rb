@@ -7,7 +7,7 @@ class HomeController < ApplicationController
     encanto['poster_path']
     encanto['backdrop_path']
 
-    poster = TMDB_BASE_URL + '/original' + encanto['poster_path'] + '?api_key=' + ENV.fetch('TMDB_API_KEY')
     backdrop = TMDB_BASE_URL + '/original' + encanto['backdrop_path'] + '?api_key=' + ENV.fetch('TMDB_API_KEY')
+    @poster_link = TMDB_BASE_URL + '/original' + encanto['poster_path'] + '?api_key=' + ENV.fetch('TMDB_API_KEY')
   end
 end
