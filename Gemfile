@@ -69,3 +69,5 @@ group :test do
 end
 
 gem "devise", "~> 4.9"
+
+gem "shakapacker", "= 8.0"
