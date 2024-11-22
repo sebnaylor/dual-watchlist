@@ -29,4 +29,4 @@ module DualWatchlist
 end
 
 # Load .env file in development and test environments
-Dotenv::Railtie.load if Rails.env.development? || Rails.env.test?
+Dotenv::Rails.load if Rails.env.development? || Rails.env.test?
