@@ -75,6 +75,7 @@ GEM
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     ast (2.4.2)
+    awesome_print (1.9.2)
     babel-source (5.8.35)
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
@@ -180,6 +181,8 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.7-x86_64-linux)
       racc (~> 1.4)
+    omdb-api (1.0.0)
+      httparty
     orm_adapter (0.5.0)
     package_json (0.1.0)
     parallel (1.26.3)
@@ -386,6 +389,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  awesome_print
   bootsnap
   brakeman
   capybara
@@ -394,6 +398,7 @@ DEPENDENCIES
   dotenv-rails
   importmap-rails
   jbuilder
+  omdb-api (~> 1.0.0)
   pry-remote
   puma (>= 5.0)
   rails (~> 7.2.2)

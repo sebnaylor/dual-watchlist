@@ -20,6 +20,7 @@
   </head>
 
   <body class='bg-backgroundBlack text-white font-sans font-light'>
+    <%= react_component("shared/Nav", { props: @props }) %>
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
     <%= yield %>

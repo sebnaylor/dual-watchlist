@@ -37,6 +37,7 @@ gem 'bootsnap', require: false
 # gem "image_processing", "~> 1.2"
 gem 'dotenv-rails'
 gem 'themoviedb'
+gem 'omdb-api', '~> 1.0.0'
 gem "tailwindcss-rails"
 
 group :development, :test do
@@ -61,6 +62,7 @@ group :development do
   gem 'ruby-lsp'
   gem 'ruby-lsp-rails'
   gem 'pry-remote'
+  gem 'awesome_print'
 end
 
 group :test do
