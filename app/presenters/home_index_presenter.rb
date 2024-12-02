@@ -5,7 +5,8 @@ class HomeIndexPresenter < BasePresenter
     {
       preview_film: {
         poster_img: poster,
-        ratings: ratings
+        ratings: ratings,
+        genres: genres
       }
     }
   end
@@ -27,5 +28,9 @@ class HomeIndexPresenter < BasePresenter
 
   def ratings
     OMDB.find_by_id('tt0137523').instance_variable_get(:@ratings)
+  end
+
+  def genres
+    film['genres'].flat_map { |genre| genre['name'] }
   end
 end

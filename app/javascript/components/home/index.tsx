@@ -2,11 +2,6 @@ import React from "react";
 import MediaPreview from "./mediaPreview";
 import Watchlist from "./watchlist";
 
-export interface previewFilmType {
-  posterImg: string;
-  ratings: { source: string; value: string }[];
-}
-
 export interface HomeProps {
   previewFilm: previewFilmType;
 }
