@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-class AddToWatchlist
+class AddToWatchlist < Base
   def initialize(media)
+    super
     @media = media
   end
 

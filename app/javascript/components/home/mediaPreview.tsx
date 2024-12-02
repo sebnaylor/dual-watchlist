@@ -6,6 +6,7 @@ export interface MediaPreviewProps {
 }
 
 const MediaPreview: React.FC<MediaPreviewProps> = ({ previewFilm }) => {
+  console.log(previewFilm);
   return (
     <>
       <div
@@ -17,12 +18,16 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({ previewFilm }) => {
         className="relative grid cols-5 rows-5 relative h-[600px] w-full bg-[image:var(--image-url)] bg-cover bg-center bg-no-repeat object-center"
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 from-0% via-transparent via-80% to-black/80 to-100%"></div>
-        <div className="row-start-4 flex gap-2 mx-auto">
-          {previewFilm.genres.map((genre, index) => (
-            <span key={index} className="text-white text-xs font-bold">
-              {genre}
-            </span>
-          ))}
+        <div className="row-start-4 flex flex-col gap-2 mx-auto">
+          <div className="text-2xl">{previewFilm.title}</div>
+          <div>{previewFilm.runtime}</div>
+          <div>
+            {previewFilm.genres.map((genre, index) => (
+              <span key={index} className="text-white text-xs font-bold">
+                {genre}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </>
