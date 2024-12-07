@@ -4,7 +4,7 @@ module Ratings
   class RottenTomatoesIcon < Base
     def initialize(rating)
       super()
-      @rating = rating
+      @rating = rating.split('/').first.to_i
     end
 
     def call

@@ -33,7 +33,7 @@ class HomeIndexPresenter < BasePresenter
       {
         source: rating['Source'],
         value: rating['Value'],
-        rating_icon: rating_icon(rating['Source'], rating['Value'])
+        icon: rating_icon(rating['Source'], rating['Value'])
       }
     end
   end
