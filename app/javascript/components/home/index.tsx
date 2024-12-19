@@ -1,6 +1,7 @@
 import React from "react";
 import MediaPreview from "./mediaPreview";
 import Watchlist from "./watchlist";
+import { previewFilmType } from "./types";
 
 export interface HomeProps {
   previewFilm: previewFilmType;

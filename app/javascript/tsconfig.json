@@ -8,12 +8,18 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "rootDir": "./"
+    "rootDir": "./",
+    "allowJs": true, // Allow JavaScript files to be compiled
+    "checkJs": true, // Check JavaScript files for errors
+    "noEmit": true, // Do not emit output files
+    "isolatedModules": true, // Ensure each file can be safely transpiled without relying on other imports
+    "resolveJsonModule": true // Allow importing JSON files
   },
   "include": [
     "./**/*"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist" // Exclude the output directory
   ]
 }
