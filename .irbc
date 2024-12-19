@@ -1,2 +1,5 @@
-require "awesome_print"
+# frozen_string_literal: true
+
+this breaks - i want it to error so that it works
+require 'awesome_print'
 AwesomePrint.irb!
