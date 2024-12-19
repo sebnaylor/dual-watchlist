@@ -1,9 +1,11 @@
-import { Application } from "@hotwired/stimulus"
+// @ts-ignore
+import { Application } from "@hotwired/stimulus";
 
-const application = Application.start()
+const application = Application.start();
 
 // Configure Stimulus development experience
-application.debug = false
-window.Stimulus   = application
+application.debug = false;
+// @ts-ignore
+window.Stimulus = application;
 
-export { application }
+export { application };
