@@ -10,7 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_16_224005) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_19_120315) do
+  create_table "media", force: :cascade do |t|
+    t.string "imdb_id"
+    t.bigint "tmdb_id"
+    t.boolean "adult"
+    t.string "backdrop_path"
+    t.integer "budget"
+    t.string "origin_country"
+    t.string "original_language"
+    t.string "original_title"
+    t.text "overview"
+    t.string "poster_path"
+    t.date "release_date"
+    t.integer "revenue"
+    t.integer "runtime"
+    t.string "status"
+    t.string "tagline"
+    t.string "title"
+    t.float "tmdb_vote_average"
+    t.integer "tmdb_vote_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"

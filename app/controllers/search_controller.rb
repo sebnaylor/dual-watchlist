@@ -8,7 +8,7 @@ class SearchController < ApplicationController
 
     respond_to do |format|
       format.html { render :index }
-      format.json { render json: SearchResponsePresenter.new(results).props }
+      format.json { render json: SearchResponsePresenter.new(results).camelize }
     end
   end
 
