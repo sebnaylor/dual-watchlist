@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_19_120315) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_24_102346) do
   create_table "media", force: :cascade do |t|
     t.string "imdb_id"
     t.bigint "tmdb_id"
@@ -32,6 +32,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_120315) do
     t.integer "tmdb_vote_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "type"
+    t.string "created_by"
+    t.date "first_air_date"
+    t.string "homepage"
+    t.boolean "in_production"
+    t.date "last_air_date"
+    t.integer "number_of_seasons"
+    t.integer "number_of_episodes"
+    t.index ["type"], name: "index_media_on_type"
   end
 
   create_table "users", force: :cascade do |t|

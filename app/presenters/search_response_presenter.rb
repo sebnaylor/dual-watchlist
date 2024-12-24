@@ -21,7 +21,8 @@ class SearchResponsePresenter < BasePresenter
   def media(media_response)
     {
       tmdb_id: media_response['id'],
-      poster_path: poster_path(media_response)
+      poster_path: poster_path(media_response),
+      media_type: media_response['media_type']
     }
   end
 

@@ -1,16 +1,16 @@
 import React from "react";
 import MediaPreview from "./mediaPreview";
 import Watchlist from "./watchlist";
-import { previewFilmType } from "./types";
+import { previewMovieType } from "./types";
 
 export interface HomeProps {
-  previewFilm: previewFilmType;
+  previewMovie: previewMovieType;
 }
 
-const Home: React.FC<HomeProps> = ({ previewFilm }) => {
+const Home: React.FC<HomeProps> = ({ previewMovie }) => {
   return (
     <>
-      <MediaPreview previewFilm={previewFilm} />
+      <MediaPreview previewMovie={previewMovie} />
       <Watchlist />
     </>
   );

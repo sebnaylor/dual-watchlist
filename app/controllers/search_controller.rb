@@ -4,7 +4,7 @@ class SearchController < ApplicationController
   def index; end
 
   def query
-    results = Tmdb::Search.new.query(search_params[:query]).fetch.take(9)
+    results = Tmdb::Search.new.resource('multi').query(search_params[:query]).fetch.first(9)
 
     respond_to do |format|
       format.html { render :index }
