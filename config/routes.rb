@@ -19,4 +19,6 @@ Rails.application.routes.draw do
   resources :search, only: [:index] do
     collection { get 'query' }
   end
+
+  get 'media/:id', to: 'media#show', as: :media_tmdb
 end

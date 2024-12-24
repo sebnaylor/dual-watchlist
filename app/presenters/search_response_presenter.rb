@@ -7,9 +7,11 @@ class SearchResponsePresenter < BasePresenter
   end
 
   def props
-    search_response.map do |media_response|
-      media(media_response)
-    end
+    {
+      test: search_response.map do |media_response|
+        media(media_response)
+      end
+    }
   end
 
   private
@@ -18,7 +20,8 @@ class SearchResponsePresenter < BasePresenter
 
   def media(media_response)
     {
-      posterPath: poster_path(media_response)
+      tmdb_id: media_response['id'],
+      poster_path: poster_path(media_response)
     }
   end
 

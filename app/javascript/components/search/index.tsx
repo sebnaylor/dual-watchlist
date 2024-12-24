@@ -7,11 +7,17 @@ export interface SearchProps {}
 
 export interface MediaProps {
   posterPath: string;
+  tmdbId: number;
+}
+[];
+
+export interface MediaProps {
+  test: Media[];
 }
 
 const Search: React.FC<SearchProps> = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [mediaResponse, setMediaResponse] = useState<MediaProps[]>([]);
+  const [mediaResponse, setMediaResponse] = useState<MediaProps>(null);
 
   async function search(searchTerm: string) {
     await axios
@@ -24,6 +30,8 @@ const Search: React.FC<SearchProps> = () => {
       })
       .then((response) => {
         setMediaResponse(response.data);
+
+        console.log(response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -34,16 +42,23 @@ const Search: React.FC<SearchProps> = () => {
     <div>
       <div className="grid grid-cols-3 grid-rows-3">
         {!!mediaResponse &&
-          mediaResponse.map((media, index) => {
+          mediaResponse.test.map((media, index) => {
             return (
-              <Image // TODO: This is working fine - should investigate why type is complaining
-                key={index}
-                src={
-                  media.posterPath ??
-                  "https://dual-watchlist.s3.eu-north-1.amazonaws.com/poster-not-found.png"
-                }
-                fallback={<Shimmer width={137} height={190} />}
-              />
+              <div
+                onClick={() => {
+                  window.location.href = `/media/${media.tmdbId}`;
+                }}
+                className="cursor-pointer"
+              >
+                <Image // TODO: This is working fine - should investigate why type is complaining
+                  key={index}
+                  src={
+                    media.posterPath ??
+                    "https://dual-watchlist.s3.eu-north-1.amazonaws.com/poster-not-found.png"
+                  }
+                  fallback={<Shimmer width={137} height={190} />}
+                />
+              </div>
             );
           })}
       </div>
