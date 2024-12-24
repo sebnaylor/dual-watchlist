@@ -3,7 +3,7 @@
 class HomeIndexPresenter < BasePresenter
   def props
     {
-      preview_film: {
+      preview_movie: {
         title: title,
         poster_img: poster,
         ratings: ratings,
@@ -15,17 +15,17 @@ class HomeIndexPresenter < BasePresenter
 
   private
 
-  def film
-    # @film ||= Tmdb::Movie.detail('568124')
-    @film ||= Tmdb::Movie.detail(Tmdb::Movie.popular.sample.id)
+  def movie
+    # @movie ||= Tmdb::Movie.detail('568124')
+    @movie ||= Tmdb::Movie.detail(Tmdb::Movie.popular.sample.id)
   end
 
   def scene
-    "#{TMDB_BASE_URL}/original#{film['backdrop_path']}?api_key=#{ENV.fetch('TMDB_API_KEY')}"
+    "#{TMDB_BASE_URL}/original#{movie['backdrop_path']}?api_key=#{ENV.fetch('TMDB_API_KEY')}"
   end
 
   def poster
-    "#{TMDB_BASE_URL}/original#{film['poster_path']}?api_key=#{ENV.fetch('TMDB_API_KEY')}"
+    "#{TMDB_BASE_URL}/original#{movie['poster_path']}?api_key=#{ENV.fetch('TMDB_API_KEY')}"
   end
 
   def ratings
@@ -39,11 +39,11 @@ class HomeIndexPresenter < BasePresenter
   end
 
   def genres
-    film['genres'].flat_map { |genre| genre['name'] }
+    movie['genres'].flat_map { |genre| genre['name'] }
   end
 
   def title
-    film['original_title']
+    movie['original_title']
   end
 
   def rating_icon(source, rating)
@@ -58,6 +58,6 @@ class HomeIndexPresenter < BasePresenter
   end
 
   def runtime
-    film['runtime']
+    movie['runtime']
   end
 end

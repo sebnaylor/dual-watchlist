@@ -1,4 +1,4 @@
-export interface previewFilmType {
+export interface previewMovieType {
   title: string;
   posterImg: string;
   ratings: { source: string; value: string; icon: string }[];

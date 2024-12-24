@@ -8,6 +8,7 @@ export interface SearchProps {}
 export interface MediaProps {
   posterPath: string;
   tmdbId: number;
+  mediaType: string;
 }
 [];
 
@@ -46,7 +47,7 @@ const Search: React.FC<SearchProps> = () => {
             return (
               <div
                 onClick={() => {
-                  window.location.href = `/media/${media.tmdbId}`;
+                  window.location.href = `/media/${media.tmdbId}?media_type=${media.mediaType}`;
                 }}
                 className="cursor-pointer"
               >
