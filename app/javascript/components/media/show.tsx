@@ -1,50 +1,46 @@
 import React from "react";
-import Button from "../shared/Button";
+import Movie from "./movie";
+import Tv from "./tv";
+import { ratingsType } from "../home/types";
 
-interface MediaShowProps {
+export interface MediaShowProps {
   media: {
-    tmdbId: string;
-    imdbId: string;
+    type: string;
     adult: boolean;
     backdropPath: string;
-    budget: number;
-    origin_country: string;
-    original_language: string;
-    original_title: string;
+    backdropPathAspectRatio: number;
+    budget: string;
+    imdbId: string;
+    originCountry: string;
+    originalLanguage: string;
+    title: string;
     overview: string;
     posterPath: string;
+    ratings: ratingsType[];
     releaseDate: string;
     revenue: number;
     runtime: number;
     status: string;
     tagline: string;
-    title: string;
-    tmdbVoteAverage: number;
-    tmdbVoteCount: number;
+    tmdbId: number;
+    tmdbVoteAverage: string | null;
+    tmdbVoteCount: string | null;
   };
-  errors?: string;
+  errors: string | null;
 }
 
 const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
   console.log(media, errors);
-  return (
-    <div>
-      <h1>Media Show</h1>
-      <div className="flex flex-col">
-        <div className="flex">
-          {media.title}
-          <Button text="Add to list" />
-        </div>
-        <div className="flex">
-          <div className="flex">
-            {media.releaseDate}
-            {media.adult}
-            {media.runtime}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+
+  const renderMedia = (media: MediaShowProps["media"]) => {
+    if (media.type === "movie") {
+      return <Movie media={media} errors={null} />;
+    } else if (media.type === "tv") {
+      return <Tv media={media} errors={null} />;
+    }
+  };
+
+  return <div>{errors ? <div>{errors}</div> : renderMedia(media)}</div>;
 };
 
 export default MediaShow;

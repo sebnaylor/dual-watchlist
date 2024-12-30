@@ -1,5 +1,6 @@
 import React from "react";
 import { previewMovieType } from "./types";
+import Ratings from "../shared/Ratings";
 
 export interface MediaPreviewProps {
   previewMovie: previewMovieType;
@@ -31,24 +32,7 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({ previewMovie }) => {
               </span>
             ))}
           </div>
-          <div className="flex justify-center gap-x-2">
-            {previewMovie.ratings.map((rating, index) => (
-              <div
-                key={index}
-                className="flex gap-x-2 text-white text-xs font-bold"
-              >
-                <img
-                  src={rating.icon}
-                  alt={rating.source}
-                  height="20"
-                  width={
-                    rating.source === "Internet Movie Database" ? "50" : "20"
-                  }
-                />
-                {rating.value}
-              </div>
-            ))}
-          </div>
+          <Ratings ratings={previewMovie.ratings} />
         </div>
       </div>
     </div>

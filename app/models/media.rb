@@ -4,7 +4,6 @@ class Media < ApplicationRecord
   validates :tmdb_id, presence: true, uniqueness: true
   validates :adult, inclusion: { in: [true, false] }
   validates :backdrop_path, presence: true
-  validates :homepage, presence: true
   validates :origin_country, presence: true
   validates :original_language, presence: true
   validates :overview, presence: true

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AddMedia < ActiveRecord::Migration[6.1]
-  def change
+  def change # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     create_table :media do |t|
       t.string :imdb_id
       t.bigint :tmdb_id
