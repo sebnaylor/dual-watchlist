@@ -12,5 +12,6 @@ class ConvertMediaToSti < ActiveRecord::Migration[7.2]
     add_column :media, :last_air_date, :date
     add_column :media, :number_of_seasons, :integer
     add_column :media, :number_of_episodes, :integer
+    add_column :media, :backdrop_aspect_ratio, :float
   end
 end

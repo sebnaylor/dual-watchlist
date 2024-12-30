@@ -3,11 +3,9 @@
 class MediaController < ApplicationController
   def show
     save_media(media) unless existing_media || fetch_media.key?('status_code')
-    @props = MediaShowPresenter.new(media, nil).props
+    @props = MediaShowPresenter.new(media, media_type_params, nil).camelize
   rescue ActiveRecord::RecordInvalid
-    if fetch_media['status_code'] == 34
-      @props = MediaShowPresenter.new(media, 'Media not found').camelize
-    end
+    @props = MediaShowPresenter.new(nil, media_type_params, 'Media not found').camelize if fetch_media['status_code'] == 34
     # use the API to render a struct of the media
   end
 
@@ -30,7 +28,7 @@ class MediaController < ApplicationController
   end
 
   def existing_media
-    @existing_media ||= Media.find_by(tmdb_id: params[:id].to_i, type: media_type_params)
+    @existing_media ||= Media.find_by(tmdb_id: params[:id].to_i, type: media_type_params.capitalize)
   end
 
   def fetch_media
@@ -70,20 +68,39 @@ class MediaController < ApplicationController
   end
 
   def assign_common_media_attributes(new_media) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    new_media.tmdb_id = media['id']
     new_media.adult = media['adult']
-    new_media.backdrop_path = media['backdrop_path']
+
     new_media.homepage = media['homepage']
     new_media.origin_country = media['origin_country'].first
     new_media.original_language = media['original_language']
     new_media.original_title = media['original_title']
     new_media.overview = media['overview']
-    new_media.poster_path = media['poster_path']
+    new_media.poster_path = poster_path(media['poster_path'])
     new_media.status = media['status']
     new_media.tagline = media['tagline']
-    new_media.title = media['title']
-    new_media.tmdb_id = media['id']
+    new_media.title = media['title'] || media['name']
     new_media.tmdb_vote_average = media['vote_average']
     new_media.tmdb_vote_count = media['vote_count']
+
+    save_backdrop(new_media)
     new_media
+  end
+
+  def poster_path(path)
+    "#{TMDB_BASE_URL}/original#{path}?api_key=#{ENV.fetch('TMDB_API_KEY')}"
+  end
+
+  def save_backdrop(new_media) # rubocop:disable Metrics/AbcSize
+    return raise unless new_media['tmdb_id']
+
+    backdrop_image = if media_type_params == 'movie'
+                       Tmdb::Movie.images(new_media['tmdb_id'])['backdrops'].first
+                     elsif media_type_params == 'tv'
+                       Tmdb::TV.images(new_media['tmdb_id'])['backdrops'].first
+                     end
+
+    new_media.backdrop_path = backdrop_image['file_path']
+    new_media.backdrop_aspect_ratio = backdrop_image['aspect_ratio']
   end
 end

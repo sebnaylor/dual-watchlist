@@ -19,7 +19,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       className={classNames(
-        "inline-flex justify-center px-4 py-2 rounded-2xl",
+        "inline-flex justify-center px-4 py-2 rounded-2xl min-w-28",
         {
           "bg-rose-700": type === "primary",
           "bg-fuchsia-400": type === "secondary",

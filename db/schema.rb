@@ -40,6 +40,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_24_102346) do
     t.date "last_air_date"
     t.integer "number_of_seasons"
     t.integer "number_of_episodes"
+    t.float "backdrop_aspect_ratio"
     t.index ["type"], name: "index_media_on_type"
   end
 
