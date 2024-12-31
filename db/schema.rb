@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_24_102346) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_30_223621) do
   create_table "media", force: :cascade do |t|
     t.string "imdb_id"
     t.bigint "tmdb_id"
@@ -44,6 +44,29 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_24_102346) do
     t.index ["type"], name: "index_media_on_type"
   end
 
+  create_table "personal_watchlist_media_items", force: :cascade do |t|
+    t.integer "personal_watchlist_id", null: false
+    t.integer "media_id", null: false
+    t.index ["media_id"], name: "index_personal_watchlist_media_items_on_media_id"
+    t.index ["personal_watchlist_id"], name: "index_personal_watchlist_media_items_on_personal_watchlist_id"
+  end
+
+  create_table "personal_watchlists", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "shared_watchlist_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shared_watchlist_id"], name: "index_personal_watchlists_on_shared_watchlist_id"
+    t.index ["user_id"], name: "index_personal_watchlists_on_user_id", unique: true
+  end
+
+  create_table "shared_watchlists", force: :cascade do |t|
+    t.string "uuid", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["uuid"], name: "index_shared_watchlists_on_uuid", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -58,4 +81,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_24_102346) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  add_foreign_key "personal_watchlist_media_items", "media", column: "media_id"
+  add_foreign_key "personal_watchlist_media_items", "personal_watchlists"
+  add_foreign_key "personal_watchlists", "shared_watchlists"
+  add_foreign_key "personal_watchlists", "users"
 end

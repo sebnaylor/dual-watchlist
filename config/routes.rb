@@ -21,4 +21,5 @@ Rails.application.routes.draw do
   end
 
   get 'media/:id', to: 'media#show', as: :media_tmdb
+  get 'media/:id/add_to_personal_watchlist', to: 'media#add_to_personal_watchlist', as: :add_to_personal_watchlist
 end

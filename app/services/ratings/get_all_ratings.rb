@@ -8,6 +8,8 @@ module Ratings
     end
 
     def call
+      return unless imdb_id
+
       OMDB.find_by_id(imdb_id).instance_variable_get(:@ratings).map do |rating|
         {
           source: rating['Source'],
