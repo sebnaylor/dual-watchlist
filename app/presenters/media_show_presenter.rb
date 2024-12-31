@@ -2,11 +2,12 @@
 
 class MediaShowPresenter < BasePresenter
   include MediaHelper
-  def initialize(media, media_type, errors)
+  def initialize(media, media_type, errors, current_user)
     super()
     @media = media
     @media_type = media_type
     @errors = errors
+    @current_user = current_user
   end
 
   def props
@@ -18,14 +19,14 @@ class MediaShowPresenter < BasePresenter
 
   private
 
-  attr_reader :media, :media_type, :errors
+  attr_reader :media, :media_type, :errors, :current_user
 
   def media_props # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     return unless media
 
     {
       type: media_type,
-      tmdb_id: media['id'],
+      tmdb_id: media['tmdb_id'],
       imdb_id: media['imdb_id'],
       adult: media['adult'],
       backdrop_path: tmdb_image_path(media['backdrop_path']),
@@ -35,7 +36,7 @@ class MediaShowPresenter < BasePresenter
       original_language: media['original_language'],
       original_title: media['original_title'],
       overview: media['overview'],
-      poster_path: poster_path(media['poster_path']),
+      poster_path: tmdb_image_path(media['poster_path']),
       ratings: Ratings::GetAllRatings.call(media['imdb_id']),
       release_date: release_date(media['release_date']),
       revenue: media['revenue'],
@@ -44,12 +45,9 @@ class MediaShowPresenter < BasePresenter
       tagline: media['tagline'],
       title: media['title'],
       tmdb_vote_average: media['vote_average'],
-      tmdb_vote_count: media['vote_count']
+      tmdb_vote_count: media['vote_count'],
+      watchlist_status: watchlist_status
     }
-  end
-
-  def poster_path(path)
-    "#{TMDB_BASE_URL}/original#{path}?api_key=#{ENV.fetch('TMDB_API_KEY')}"
   end
 
   def release_date(date)
@@ -57,5 +55,12 @@ class MediaShowPresenter < BasePresenter
 
     sanitised_date = date.is_a?(Date) ? date : Date.parse(date)
     sanitised_date.strftime('%Y')
+  end
+
+  def watchlist_status
+    {
+      in_personal_watchlist: media.in_personal_watchlist?(current_user),
+      in_shared_watchlist: media.in_shared_watchlist?(current_user)
+    }
   end
 end
