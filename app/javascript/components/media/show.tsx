@@ -16,7 +16,7 @@ export interface MediaShowProps {
     title: string;
     overview: string;
     posterPath: string;
-    ratings: ratingsType[];
+    ratings: ratingsType[] | null;
     releaseDate: string;
     revenue: number;
     runtime: number;
@@ -25,6 +25,9 @@ export interface MediaShowProps {
     tmdbId: number;
     tmdbVoteAverage: string | null;
     tmdbVoteCount: string | null;
+    watchlistStatus: {
+      inPersonalWatchlist: boolean;
+    };
   };
   errors: string | null;
 }

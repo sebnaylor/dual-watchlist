@@ -7,8 +7,8 @@ import Backdrop from "./backdrop";
 const Tv: React.FC<MediaShowProps> = ({ media }) => {
   return (
     <>
-      <div className="flex flex-col gap-y-2 px-2">
-        <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-y-2">
+        <div className="flex justify-between items-center px-2">
           <span className="text-2xl">{media.title}</span>
           <Button
             text="Add to list"
@@ -20,7 +20,7 @@ const Tv: React.FC<MediaShowProps> = ({ media }) => {
             }}
           />
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center px-2">
           <div className="flex gap-x-2">
             <span className="font-thin">{media.adult ? "15+" : "U - 12"}</span>
           </div>
@@ -34,10 +34,15 @@ const Tv: React.FC<MediaShowProps> = ({ media }) => {
             }}
           />
         </div>
-        <Backdrop backdropPath={media.backdropPath} />
-        <Ratings ratings={media.ratings} />
+        {media.backdropPath && <Backdrop backdropPath={media.backdropPath} />}
+
+        <span className="px-2">
+          {!!media.ratings && <Ratings ratings={media.ratings} />}
+        </span>
       </div>
-      <div>{media.overview}</div>
+      <span className="px-2">
+        <div>{media.overview}</div>
+      </span>
     </>
   );
 };
