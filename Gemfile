@@ -49,6 +49,10 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem 'rubocop-rails-omakase', require: false
+  gem 'rspec-rails', '~> 7.0.0'
+  gem 'factory_bot_rails'
+  gem 'faker'
+  gem 'pry-remote'
 end
 
 group :development do
@@ -61,7 +65,6 @@ group :development do
   gem 'rubocop-rake'
   gem 'ruby-lsp'
   gem 'ruby-lsp-rails'
-  gem 'pry-remote'
   gem 'awesome_print'
 end
 
