@@ -7,7 +7,6 @@ class SearchController < ApplicationController
     results = Tmdb::Search.new.resource('multi').query(search_params[:query]).fetch.first(9)
 
     respond_to do |format|
-      format.html { render :index }
       format.json { render json: SearchResponsePresenter.new(results).camelize }
     end
   end
