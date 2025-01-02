@@ -60,7 +60,33 @@ class MediaShowPresenter < BasePresenter
   def watchlist_status
     {
       in_personal_watchlist: media.in_personal_watchlist?(current_user),
-      in_shared_watchlist: media.in_shared_watchlist?(current_user)
+      personal_watchlist_media_item: personal_watchlist_media_item_props,
+      in_shared_watchlist: media.in_shared_watchlist?(current_user),
+      shared_watchlist_media_item: shared_watchlist_media_item_props
+    }
+  end
+
+  def personal_watchlist_media_item
+    @personal_watchlist_media_item ||= current_user.personal_watchlist_media_items.find_by(media_id: media.id)
+  end
+
+  def shared_watchlist_media_item
+    @shared_watchlist_media_item ||= current_user.shared_watchlist_media_items.find_by(media_id: media.id)
+  end
+
+  def personal_watchlist_media_item_props
+    return unless personal_watchlist_media_item
+
+    {
+      personal_watchlist_media_item_id: personal_watchlist_media_item.id
+    }
+  end
+
+  def shared_watchlist_media_item_props
+    return unless shared_watchlist_media_item
+
+    {
+      personal_watchlist_media_item_id: shared_watchlist_media_item.id
     }
   end
 end

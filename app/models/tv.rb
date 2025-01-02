@@ -7,4 +7,5 @@ class Tv < Media
   validates :last_air_date, presence: true
   validates :number_of_seasons, presence: true
   validates :number_of_episodes, presence: true
+  validates :tmdb_id, presence: true, uniqueness: true
 end
