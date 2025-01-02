@@ -8,26 +8,28 @@ import axios from "axios";
 const Movie: React.FC<MediaShowProps> = ({ media }) => {
   async function addToList(media: MediaShowProps["media"]) {
     await axios
-      .get(`/media/${media.tmdbId}/add_to_personal_watchlist`, {
-        params: {
-          media_type: "movie",
-        },
+      .post(`/media/${media.tmdbId}/add_to_personal_watchlist.json`, {
+        media_type: "movie",
       })
       .then((response) => {
         console.log(response);
+        window.location.reload();
       })
       .catch((error) => {
         console.error(error);
       });
   }
-
   return (
     <>
-      <div className="flex flex-col gap-y-2 px-2">
+      <div className="flex flex-col gap-y-2 px-2 mb-2">
         <div className="flex justify-between items-center">
-          {media.title}
+          <span className="text-2xl">{media.title}</span>
           <Button
-            text="Add to list"
+            text={
+              media.watchlistStatus.inPersonalWatchlist
+                ? "Listed"
+                : "Add to list"
+            }
             type="primary"
             pressed={false}
             icon="plus"
@@ -42,19 +44,25 @@ const Movie: React.FC<MediaShowProps> = ({ media }) => {
             <span className="font-thin">{media.adult ? "15+" : "U - 12"}</span>
             <span>{media.runtime} minutes</span>
           </div>
-          <Button
-            text="Watch"
-            type="secondary"
-            pressed={false}
-            icon="tv"
-            onClick={() => {
-              console.log("watch");
-            }}
-          />
+          {media.watchlistStatus.inPersonalWatchlist && (
+            <Button
+              text="Watch"
+              type="secondary"
+              pressed={false}
+              icon="tv"
+              onClick={() => {
+                console.log("watch");
+              }}
+            />
+          )}
         </div>
-        {media.backdropPath && <Backdrop backdropPath={media.backdropPath} />}
-        {!!media.ratings && <Ratings ratings={media.ratings} />}
-        <div>{media.overview}</div>
+      </div>
+      {media.backdropPath && <Backdrop backdropPath={media.backdropPath} />}
+      <div className="flex flex-col gap-y-2 px-2 mt-2">
+        <div className="px-2">
+          {!!media.ratings && <Ratings ratings={media.ratings} />}
+        </div>
+        <div className="px-2">{media.overview}</div>
       </div>
     </>
   );

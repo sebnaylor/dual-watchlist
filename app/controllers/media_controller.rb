@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 class MediaController < ApplicationController
-  def show
+  skip_before_action :verify_authenticity_token, only: [:add_to_personal_watchlist] # TODO: move this to meta tags
+
+  def show # rubocop:disable Metrics/AbcSize
     save_media(media, media_type_params) unless existing_media || fetch_media.key?('status_code')
     @props = MediaShowPresenter.new(media, media_type_params, nil, current_user).camelize
   rescue ActiveRecord::RecordInvalid
@@ -9,7 +11,7 @@ class MediaController < ApplicationController
     # use the API to render a struct of the media
   end
 
-  def add_to_personal_watchlist
+  def add_to_personal_watchlist # TODO: refactor away to its own controller IDK what I was thinking here
     return unless existing_media
 
     PersonalWatchlistMediaItem.create!(personal_watchlist: PersonalWatchlist.find_or_create_by(user: current_user), media: existing_media)
