@@ -1,5 +1,6 @@
-export interface previewMovieType {
+export interface previewMovieTypes {
   title: string;
+  tmdbId: number;
   posterImg: string;
   ratings: ratingsType[];
   runtime: string;
@@ -10,4 +11,23 @@ export interface ratingsType {
   source: string;
   value: string;
   icon: string;
+}
+
+export interface watchlistTypes {
+  watchlist_items: {
+    movies: {
+      mediaType: string;
+      mediaItemId: number;
+      mediaTmdbId: number;
+      title: string;
+      posterImg: string;
+    }[];
+    tv: {
+      mediaType: string;
+      mediaItemId: number;
+      mediaTmdbId: number;
+      title: string;
+      posterImg: string;
+    }[];
+  };
 }

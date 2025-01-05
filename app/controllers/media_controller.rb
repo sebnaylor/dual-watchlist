@@ -3,11 +3,11 @@
 class MediaController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:add_to_personal_watchlist] # TODO: move this to meta tags
 
-  def show # rubocop:disable Metrics/AbcSize
+  def show
     save_media(media, media_type_params) unless existing_media || fetch_media.key?('status_code')
     @props = MediaShowPresenter.new(media, media_type_params, nil, current_user).camelize
-  rescue ActiveRecord::RecordInvalid
-    @props = MediaShowPresenter.new(nil, media_type_params, 'Media not found', current_user).camelize if fetch_media['status_code'] == 34
+  rescue StandardError
+    @props = MediaShowPresenter.new(nil, media_type_params, 'Media not found', current_user).camelize
     # use the API to render a struct of the media
   end
 
@@ -42,9 +42,11 @@ class MediaController < ApplicationController
   end
 
   def fetch_media
-    if media_type_params == 'movie'
+    return StandardError unless media_type_params == 'Movie' || media_type_params == 'Tv'
+
+    if media_type_params == 'Movie'
       Tmdb::Movie.detail(params[:id])
-    elsif media_type_params == 'tv'
+    elsif media_type_params == 'Tv'
       Tmdb::TV.detail(params[:id])
     end
   end

@@ -22,7 +22,7 @@ class SearchResponsePresenter < BasePresenter
     {
       tmdb_id: media_response['id'],
       poster_path: poster_path(media_response),
-      media_type: media_response['media_type']
+      media_type: media_response['media_type'].capitalize
     }
   end
 

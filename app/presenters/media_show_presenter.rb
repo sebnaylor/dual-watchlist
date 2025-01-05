@@ -22,7 +22,7 @@ class MediaShowPresenter < BasePresenter
   attr_reader :media, :media_type, :errors, :current_user
 
   def media_props # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    return unless media
+    return {} unless media
 
     {
       type: media_type,
@@ -58,6 +58,8 @@ class MediaShowPresenter < BasePresenter
   end
 
   def watchlist_status
+    return {} unless media.is_a?(Media)
+
     {
       in_personal_watchlist: media.in_personal_watchlist?(current_user),
       personal_watchlist_media_item: personal_watchlist_media_item_props,

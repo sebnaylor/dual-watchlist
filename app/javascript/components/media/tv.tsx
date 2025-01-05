@@ -22,8 +22,8 @@ const Tv: React.FC<MediaShowProps> = ({ media }) => {
 
   return (
     <>
-      <div className="flex flex-col gap-y-2 px-2 mb-2">
-        <div className="flex justify-between items-center ">
+      <div className="flex flex-col gap-y-2 mb-2">
+        <div className="flex justify-between items-center px-2">
           <span className="text-2xl">{media.title}</span>
           <Button
             text={
@@ -39,7 +39,7 @@ const Tv: React.FC<MediaShowProps> = ({ media }) => {
             }}
           />
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center px-2">
           <div className="flex gap-x-2">
             <span className="font-thin">{media.adult ? "15+" : "U - 12"}</span>
           </div>

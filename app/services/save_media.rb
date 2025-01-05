@@ -37,7 +37,7 @@ class SaveMedia < Base
     new_tv = assign_common_media_attributes(Tv.new)
     new_tv.assign_attributes(
       imdb_id: Tmdb::TV.external_ids(media[:tmdb_id])['imdb_id'],
-      created_by: media['created_by'].first['name'],
+      created_by: media['created_by']&.first&.[]('name'),
       first_air_date: media['first_air_date'],
       in_production: media['in_production'],
       last_air_date: media['last_air_date'],
@@ -68,7 +68,7 @@ class SaveMedia < Base
   end
 
   def poster_path(path)
-    "#{TMDB_BASE_URL}/original#{path}?api_key=#{ENV.fetch('TMDB_API_KEY')}"
+    "#{TMDB_BASE_URL}/original#{path}"
   end
 
   def save_backdrop(new_media) # rubocop:disable Metrics/AbcSize

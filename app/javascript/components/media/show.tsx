@@ -36,9 +36,9 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
   console.log(media, errors);
 
   const renderMedia = (media: MediaShowProps["media"]) => {
-    if (media.type === "movie") {
+    if (media.type === "Movie") {
       return <Movie media={media} errors={null} />;
-    } else if (media.type === "tv") {
+    } else if (media.type === "Tv") {
       return <Tv media={media} errors={null} />;
     }
   };
