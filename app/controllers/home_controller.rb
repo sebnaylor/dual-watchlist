@@ -3,11 +3,12 @@
 class HomeController < ApplicationController
   before_action :authenticate_user!
   def index
-    encanto = Tmdb::Movie.detail('568124')
+    @props = HomeIndexPresenter.new(current_user, watchlist_params).camelize
+  end
 
-    @backdrop = TMDB_BASE_URL + '/original' + encanto['backdrop_path'] + '?api_key=' + ENV.fetch('TMDB_API_KEY')
-    @poster_link = TMDB_BASE_URL + '/original' + encanto['poster_path'] + '?api_key=' + ENV.fetch('TMDB_API_KEY')
+  private
 
-    @props = HomeIndexPresenter.new.camelize
+  def watchlist_params
+    params.permit(:watchlist)[:watchlist]
   end
 end

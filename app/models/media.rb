@@ -8,7 +8,6 @@ class Media < ApplicationRecord
   validates :overview, presence: true
   validates :poster_path, presence: true
   validates :status, presence: true
-  validates :tagline, presence: true
   validates :tmdb_vote_average, presence: true
   validates :tmdb_vote_count, presence: true
 

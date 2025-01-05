@@ -3,7 +3,7 @@ import classNames from "classnames";
 
 export interface ButtonProps {
   text: string;
-  type: "primary" | "secondary";
+  type: "primary" | "secondary" | "tertiary";
   pressed: boolean;
   icon: string;
   onClick: () => void;
@@ -19,7 +19,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       className={classNames(
-        "inline-flex justify-center px-4 py-2 rounded-2xl min-w-28",
+        "inline-flex justify-center px-2 py-1 rounded-2xl min-w-28",
         {
           "bg-rose-900": type === "primary" && pressed,
           "bg-rose-700": type === "primary",

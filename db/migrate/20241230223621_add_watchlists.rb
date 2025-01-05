@@ -18,6 +18,8 @@ class AddWatchlists < ActiveRecord::Migration[7.2]
     create_table :personal_watchlist_media_items do |t|
       t.references :personal_watchlist, null: false, foreign_key: true
       t.references :media, null: false, foreign_key: true
+
+      t.timestamps
     end
   end
 end

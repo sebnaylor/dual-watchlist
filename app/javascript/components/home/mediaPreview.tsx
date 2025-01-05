@@ -1,9 +1,9 @@
 import React from "react";
-import { previewMovieType } from "./types";
+import { previewMovieTypes } from "./types";
 import Ratings from "../shared/Ratings";
 
 export interface MediaPreviewProps {
-  previewMovie: previewMovieType;
+  previewMovie: previewMovieTypes;
 }
 
 const MediaPreview: React.FC<MediaPreviewProps> = ({ previewMovie }) => {
@@ -15,6 +15,9 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({ previewMovie }) => {
         } as React.CSSProperties
       }
       className="relative h-[600px] w-full bg-[image:var(--image-url)] bg-cover bg-center bg-no-repeat object-center"
+      onClick={() => {
+        window.location.href = `/media/${previewMovie.tmdbId}?media_type=Movie`;
+      }}
     >
       <div className="absolute inset-0 bg-gradient-to-b from-black/80 from-0% via-transparent via-40% to-black/80 to-100%"></div>
       <div className="relative grid place-items-center h-full">

@@ -48,6 +48,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_02_151309) do
   create_table "personal_watchlist_media_items", force: :cascade do |t|
     t.integer "personal_watchlist_id", null: false
     t.integer "media_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "watched", default: false, null: false
     t.index ["media_id"], name: "index_personal_watchlist_media_items_on_media_id"
     t.index ["personal_watchlist_id"], name: "index_personal_watchlist_media_items_on_personal_watchlist_id"

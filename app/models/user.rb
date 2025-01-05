@@ -12,7 +12,7 @@ class User < ApplicationRecord
   has_many :shared_watchlist_media_items, through: :shared_watchlist, source: :media_items
 
   before_validation :generate_join_code, on: :create
-  before_validation :create_personal_watchlist, on: :create
+  before_validation :create_watchlists, on: :create
 
   private
 
@@ -20,7 +20,8 @@ class User < ApplicationRecord
     self.join_code = SecureRandom.uuid
   end
 
-  def create_personal_watchlist
+  def create_watchlists
     build_personal_watchlist
+    build_shared_watchlist
   end
 end
