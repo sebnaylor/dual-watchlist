@@ -1,5 +1,5 @@
 {
-  "packageManager": "npm@8.16.0",
+  "packageManager": "yarn@1.22.22",
   "name": "app",
   "private": true,
   "version": "0.1.0",
