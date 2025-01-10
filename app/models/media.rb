@@ -11,6 +11,8 @@ class Media < ApplicationRecord
   validates :tmdb_vote_average, presence: true
   validates :tmdb_vote_count, presence: true
 
+  has_many :personal_watchlist_media_items, dependent: :destroy
+
   def in_personal_watchlist?(current_user)
     current_user.personal_watchlist.media.include?(self)
   end
