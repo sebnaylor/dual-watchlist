@@ -12,9 +12,8 @@ class MediaController < ApplicationController
   end
 
   def add_to_personal_watchlist # TODO: refactor away to its own controller IDK what I was thinking here
-    return unless existing_media
-
-    PersonalWatchlistMediaItem.create!(personal_watchlist: PersonalWatchlist.find_or_create_by(user: current_user), media: existing_media)
+    media_to_save = existing_media || save_media(media, media_type_params)
+    PersonalWatchlistMediaItem.create!(personal_watchlist: PersonalWatchlist.find_or_create_by(user: current_user), media: media_to_save)
 
     respond_to do |format|
       format.json { render json: { success: true } }
@@ -30,7 +29,7 @@ class MediaController < ApplicationController
   end
 
   def save_media(media, media_type)
-    SaveMedia.call(media, media_type)
+    @save_media ||= SaveMedia.call(media, media_type)
   end
 
   def media

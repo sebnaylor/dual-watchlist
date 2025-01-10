@@ -5,5 +5,5 @@ class PersonalWatchlist < ApplicationRecord
   belongs_to :shared_watchlist, optional: true
 
   has_many :media_items, class_name: 'PersonalWatchlistMediaItem', dependent: :destroy
-  has_many :media, through: :media_items
+  has_many :media, through: :media_items, dependent: :destroy
 end

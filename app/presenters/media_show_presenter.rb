@@ -26,7 +26,7 @@ class MediaShowPresenter < BasePresenter
 
     {
       type: media_type,
-      tmdb_id: media['tmdb_id'],
+      tmdb_id: media['tmdb_id'] || media['id'],
       imdb_id: media['imdb_id'],
       adult: media['adult'],
       backdrop_path: tmdb_image_path(media['backdrop_path']),

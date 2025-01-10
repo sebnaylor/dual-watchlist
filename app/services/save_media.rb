@@ -8,9 +8,9 @@ class SaveMedia < Base
   end
 
   def call
-    if media_type == 'movie'
+    if media_type == 'Movie'
       save_movie_media
-    elsif media_type == 'tv'
+    elsif media_type == 'Tv'
       save_tv_media
     end
   end
@@ -31,6 +31,7 @@ class SaveMedia < Base
     )
 
     new_movie.save!
+    new_movie
   end
 
   def save_tv_media # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
@@ -45,6 +46,7 @@ class SaveMedia < Base
       number_of_episodes: media['number_of_episodes']
     )
     new_tv.save!
+    new_tv
   end
 
   def assign_common_media_attributes(new_media) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
@@ -63,7 +65,7 @@ class SaveMedia < Base
     new_media.tmdb_vote_average = media['vote_average']
     new_media.tmdb_vote_count = media['vote_count']
 
-    save_backdrop(new_media)
+    assign_backdrop(new_media)
     new_media
   end
 
@@ -71,12 +73,12 @@ class SaveMedia < Base
     "#{TMDB_BASE_URL}/original#{path}"
   end
 
-  def save_backdrop(new_media) # rubocop:disable Metrics/AbcSize
+  def assign_backdrop(new_media) # rubocop:disable Metrics/AbcSize
     return raise unless new_media['tmdb_id']
 
-    backdrop_image = if media_type == 'movie'
+    backdrop_image = if media_type == 'Movie'
                        Tmdb::Movie.images(new_media['tmdb_id'])['backdrops'].first
-                     elsif media_type == 'tv'
+                     elsif media_type == 'Tv'
                        Tmdb::TV.images(new_media['tmdb_id'])['backdrops'].first
                      end
 

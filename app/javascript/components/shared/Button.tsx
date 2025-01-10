@@ -6,7 +6,7 @@ export interface ButtonProps {
   type: "primary" | "secondary" | "tertiary";
   pressed: boolean;
   icon: string;
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const Button: React.FC<ButtonProps> = ({
