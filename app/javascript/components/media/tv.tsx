@@ -24,7 +24,7 @@ const Tv: React.FC<MediaShowProps> = ({ media }) => {
     <>
       <div className="flex flex-col gap-y-2 mb-2">
         <div className="flex justify-between items-center px-2">
-          <span className="text-2xl">{media.title}</span>
+          <span className="text-2xl">{media.name}</span>
           <Button
             text={
               media.watchlistStatus.inPersonalWatchlist

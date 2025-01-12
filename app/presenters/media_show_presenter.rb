@@ -32,6 +32,7 @@ class MediaShowPresenter < BasePresenter
       backdrop_path: tmdb_image_path(media['backdrop_path']),
       backdrop_path_aspect_ratio: media['backdrop_aspect_ratio'],
       budget: media['budget'],
+      name: media['name'],
       origin_country: media['origin_country'].first, # TODO: parse this properly
       original_language: media['original_language'],
       original_title: media['original_title'],

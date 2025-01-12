@@ -11,6 +11,7 @@ export interface MediaShowProps {
     backdropPathAspectRatio: number;
     budget: string;
     imdbId: string;
+    name: string;
     originCountry: string;
     originalLanguage: string;
     title: string;
