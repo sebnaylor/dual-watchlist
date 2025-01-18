@@ -6,8 +6,6 @@ export interface WatchlistProps {
 }
 
 const Watchlist: React.FC<WatchlistProps> = ({ watchlistItems }) => {
-  console.log(watchlistItems);
-
   return (
     <div className="px-2">
       <div className="flex justify-between items-center">

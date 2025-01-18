@@ -2,6 +2,7 @@
 
 class HomeIndexPresenter < BasePresenter
   include MediaHelper
+  include Rails.application.routes.url_helpers
 
   def initialize(current_user, watchlist_params)
     super()
@@ -28,7 +29,8 @@ class HomeIndexPresenter < BasePresenter
             media_item_id: media_item.id,
             media_tmdb_id: media_item.media.tmdb_id,
             title: media_item.media.title,
-            poster_img: media_item.media.poster_path
+            poster_img: media_item.media.poster_path,
+            user_image: media_item.user.image.attached? ? rails_blob_path(media_item.user.image, only_path: true) : nil
           }
         end.flatten.compact,
         tv: watchlisted_items.map do |media_item|
@@ -39,7 +41,8 @@ class HomeIndexPresenter < BasePresenter
             media_item_id: media_item.id,
             media_tmdb_id: media_item.media.tmdb_id,
             title: media_item.media.title,
-            poster_img: media_item.media.poster_path
+            poster_img: media_item.media.poster_path,
+            user_image: media_item.user.image.attached? ? rails_blob_path(media_item.user.image, only_path: true) : nil
           }
         end.flatten.compact
       }
@@ -56,9 +59,17 @@ class HomeIndexPresenter < BasePresenter
 
   def watchlisted_items
     @watchlisted_items ||= if watchlist_params == 'personal'
-                             current_user.personal_watchlist_media_items.joins(%i[media personal_watchlist])
+                             personal_watchlist_items
                            else
-                             current_user.shared_watchlist_media_items.joins(%i[media personal_watchlist])
+                             shared_watchlist_items.presence || personal_watchlist_items
                            end
+  end
+
+  def personal_watchlist_items
+    @personal_watchlist_items ||= current_user.watchlist_media_items.joins(%i[media personal_watchlist])
+  end
+
+  def shared_watchlist_items
+    @shared_watchlist_items ||= current_user.shared_watchlist_media_items.joins(%i[media personal_watchlist])
   end
 end

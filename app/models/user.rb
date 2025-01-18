@@ -10,7 +10,7 @@ class User < ApplicationRecord
   end
 
   has_one :personal_watchlist, dependent: :destroy
-  has_many :personal_watchlist_media_items, through: :personal_watchlist, source: :media_items
+  has_many :watchlist_media_items, through: :personal_watchlist, source: :media_items
   has_one :shared_watchlist, through: :personal_watchlist, dependent: :destroy
   has_many :shared_watchlist_media_items, through: :shared_watchlist, source: :media_items
 
@@ -25,6 +25,9 @@ class User < ApplicationRecord
 
   def create_watchlists
     build_personal_watchlist
-    build_shared_watchlist
+  end
+
+  def watched?(media)
+    watchlist_media_items.find_by(media_id: media.id).watched
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_12_163349) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_18_134343) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -76,16 +76,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_163349) do
     t.index ["type"], name: "index_media_on_type"
   end
 
-  create_table "personal_watchlist_media_items", force: :cascade do |t|
-    t.bigint "personal_watchlist_id", null: false
-    t.bigint "media_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "watched", default: false, null: false
-    t.index ["media_id"], name: "index_personal_watchlist_media_items_on_media_id"
-    t.index ["personal_watchlist_id"], name: "index_personal_watchlist_media_items_on_personal_watchlist_id"
-  end
-
   create_table "personal_watchlists", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "shared_watchlist_id"
@@ -116,10 +106,20 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_163349) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "watchlist_media_items", force: :cascade do |t|
+    t.bigint "personal_watchlist_id", null: false
+    t.bigint "media_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "watched", default: false, null: false
+    t.index ["media_id"], name: "index_watchlist_media_items_on_media_id"
+    t.index ["personal_watchlist_id"], name: "index_watchlist_media_items_on_personal_watchlist_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "personal_watchlist_media_items", "media", column: "media_id"
-  add_foreign_key "personal_watchlist_media_items", "personal_watchlists"
   add_foreign_key "personal_watchlists", "shared_watchlists"
   add_foreign_key "personal_watchlists", "users"
+  add_foreign_key "watchlist_media_items", "media", column: "media_id"
+  add_foreign_key "watchlist_media_items", "personal_watchlists"
 end

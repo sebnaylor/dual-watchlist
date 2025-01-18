@@ -1,36 +1,12 @@
 # frozen_string_literal: true
 
 class MediaController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [:add_to_personal_watchlist] # TODO: move this to meta tags
-
   def show
     save_media(media, media_type_params) unless existing_media || fetch_media.key?('status_code')
     @props = MediaShowPresenter.new(media, media_type_params, nil, current_user).camelize
   rescue StandardError
     @props = MediaShowPresenter.new(nil, media_type_params, 'Media not found', current_user).camelize
     # use the API to render a struct of the media
-  end
-
-  def add_to_personal_watchlist # TODO: refactor away to its own controller IDK what I was thinking here
-    media_to_save = existing_media || save_media(media, media_type_params)
-    PersonalWatchlistMediaItem.create!(personal_watchlist: PersonalWatchlist.find_or_create_by(user: current_user), media: media_to_save)
-
-    respond_to do |format|
-      format.json { render json: { success: true } }
-    rescue ActiveRecord::RecordInvalid => e
-      format.json { render json: { success: false, message: e.errors.messages } }
-    end
-  end
-
-  def remove_from_personal_watchlist
-    media_to_remove = existing_media
-    PersonalWatchlistMediaItem.find_by(personal_watchlist: PersonalWatchlist.find_by(user: current_user), media: media_to_remove).destroy
-
-    respond_to do |format|
-      format.json { render json: { success: true } }
-    rescue ActiveRecord::RecordInvalid => e
-      format.json { render json: { success: false, message: e.errors.messages } }
-    end
   end
 
   private

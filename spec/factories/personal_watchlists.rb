@@ -6,8 +6,8 @@ FactoryBot.define do
 
     trait :with_media do
       after(:create) do |personal_watchlist|
-        create(:personal_watchlist_media_item, :movie, personal_watchlist: personal_watchlist)
-        create(:personal_watchlist_media_item, :tv, personal_watchlist: personal_watchlist)
+        create(:watchlist_media_item, :movie, personal_watchlist: personal_watchlist)
+        create(:watchlist_media_item, :tv, personal_watchlist: personal_watchlist)
       end
     end
 

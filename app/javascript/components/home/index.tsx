@@ -9,6 +9,7 @@ export interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ previewMovie, watchlistItems }) => {
+  console.log(previewMovie, watchlistItems);
   return (
     <>
       <MediaPreview previewMovie={previewMovie} />

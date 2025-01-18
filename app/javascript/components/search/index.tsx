@@ -60,7 +60,7 @@ const Search: React.FC<SearchProps> = () => {
                     "https://dual-watchlist.s3.eu-north-1.amazonaws.com/poster-not-found.png"
                   }
                   fallback={<Shimmer width={137} height={190} />}
-                />1
+                />
               </div>
             );
           })}
@@ -78,7 +78,7 @@ const Search: React.FC<SearchProps> = () => {
             text="Search"
             type="primary"
             pressed={false}
-            icon="search"
+            icon={null}
             onClick={() => {
               search(searchTerm);
             }}

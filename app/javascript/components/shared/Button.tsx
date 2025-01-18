@@ -5,7 +5,7 @@ export interface ButtonProps {
   text: string;
   type: "primary" | "secondary" | "tertiary";
   pressed: boolean;
-  icon: React.ReactNode;
+  icon: React.ReactNode | null;
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -21,6 +21,7 @@ const Button: React.FC<ButtonProps> = ({
       className={classNames(
         "inline-flex items-center gap-x-2 px-2 py-1 rounded-2xl min-w-28",
         {
+          "justify-center": !icon,
           "bg-emerald-800 border border-emerald-600":
             type === "primary" && pressed,
           "bg-emerald-500": type === "primary" && !pressed,

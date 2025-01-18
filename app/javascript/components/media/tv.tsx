@@ -10,7 +10,8 @@ const Tv: React.FC<MediaShowProps> = ({ media }) => {
   console.log(media);
   async function addToList(media: MediaShowProps["media"]) {
     await axios
-      .post(`/media/${media.tmdbId}/add_to_personal_watchlist.json`, {
+      .post(`/watchlist_media_items.json`, {
+        media_tmdb_id: media.tmdbId,
         media_type: "tv",
       })
       .then((response) => {

@@ -10,7 +10,7 @@ RSpec.describe Movie, type: :model do
       let(:watchlist_one) { create(:personal_watchlist, user: user, shared_watchlist: shared_watchlist) }
       let(:watchlist_two) { create(:personal_watchlist, shared_watchlist: shared_watchlist) }
       let(:shared_watchlist) { create(:shared_watchlist) }
-      let(:media_item) { create(:personal_watchlist_media_item, personal_watchlist: watchlist_two, media: movie) }
+      let(:media_item) { create(:watchlist_media_item, personal_watchlist: watchlist_two, media: movie) }
 
       before do
         watchlist_one

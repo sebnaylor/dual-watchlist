@@ -30,11 +30,11 @@ export interface MediaShowProps {
     watchlistStatus: {
       inPersonalWatchlist: boolean;
       personalWatchlistMediaItem: {
-        personalWatchlistMediaItemId: number;
+        id: number;
       };
       inSharedWatchlist: boolean;
       sharedWatchlistMediaItem: {
-        sharedWatchlistMediaItemId: number;
+        id: number;
       };
     };
   };

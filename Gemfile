@@ -68,6 +68,7 @@ group :development do
   gem 'ruby-lsp'
   gem 'ruby-lsp-rails'
   gem 'awesome_print'
+  gem "overmind"
 end
 
 group :test do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :personal_watchlist_media_item do
+  factory :watchlist_media_item do
     trait :movie do
       media { create(:movie) }
     end

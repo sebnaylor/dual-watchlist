@@ -22,9 +22,12 @@ Rails.application.routes.draw do
   end
 
   get 'analytics', to: 'analytics#show', as: :analytics
-  patch 'analytics/combine_watchlists', to: 'analytics#combine_watchlists', as: :combine_watchlists
+  post 'analytics/create_shared_watchlist', to: 'analytics#create_shared_watchlist'
 
-  get 'media/:id', to: 'media#show', as: :media_tmdb
-  post 'media/:id/add_to_personal_watchlist', to: 'media#add_to_personal_watchlist', as: :add_to_personal_watchlist
+  resources :watchlist_media_items, only: %i[create update destroy]
+
+  resources :media, only: [:show]
+
+  # post 'media/:id/add_to_personal_watchlist', to: 'media#add_to_personal_watchlist', as: :add_to_personal_watchlist
   delete 'media/:id/remove_from_personal_watchlist', to: 'media#remove_from_personal_watchlist', as: :remove_from_personal_watchlist
 end

@@ -9,17 +9,29 @@ interface AnalyticsProps {
 }
 
 const Analytics: React.FC<AnalyticsProps> = ({ user }) => {
-  const [shareCode, setShareCode] = React.useState<string>("");
+  const [joinCode, setJoinCode] = React.useState<string>("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setShareCode(e.target.value);
+    setJoinCode(e.target.value);
   };
 
   async function postRequest() {
     await axios
-      .patch("/analytics/combine_watchlists.json", {
-        share_code: shareCode,
-      })
+      .post(
+        "/analytics/create_shared_watchlist.json",
+        {
+          join_code: joinCode,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token":
+              document
+                .querySelector('meta[name="csrf-token"]')
+                ?.getAttribute("content") || "",
+          },
+        }
+      )
       .then((response) => {
         console.log(response.data);
       })

@@ -13,24 +13,41 @@ const Movie: React.FC<MediaShowProps> = ({ media }) => {
 
   async function addToList(media: MediaShowProps["media"]) {
     await axios
-      .post(`/media/${media.tmdbId}/add_to_personal_watchlist.json`, {
-        media_type: "movie",
-      })
+      .post(
+        `/watchlist_media_items.json`,
+        {
+          media_tmdb_id: media.tmdbId,
+          media_type: "movie",
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token":
+              document
+                .querySelector('meta[name="csrf-token"]')
+                ?.getAttribute("content") || "",
+          },
+        }
+      )
       .then((response) => {
         console.log(response);
         setPressedListButton(!pressedListButton);
+        window.location.reload();
       })
       .catch((error) => {
         console.error(error);
       });
   }
 
-  async function removeFromList(media: MediaShowProps["media"]) {
+  async function removeFromList(
+    mediaWatchlistItem: MediaShowProps["media"]["watchlistStatus"]["personalWatchlistMediaItem"]
+  ) {
+    console.log(mediaWatchlistItem);
     const csrfToken = document
       .querySelector('meta[name="csrf-token"]')
       ?.getAttribute("content");
     await axios
-      .delete(`/media/${media.tmdbId}/remove_from_personal_watchlist.json`, {
+      .delete(`/watchlist_media_items/${mediaWatchlistItem.id}.json`, {
         headers: {
           "X-CSRF-Token": csrfToken,
         },
@@ -41,6 +58,35 @@ const Movie: React.FC<MediaShowProps> = ({ media }) => {
       .then((response) => {
         console.log(response);
         setPressedListButton(!pressedListButton);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  async function markAsWatchedOrUnWatched(
+    mediaWatchlistItem: MediaShowProps["media"]["watchlistStatus"]["personalWatchlistMediaItem"]
+  ) {
+    await axios
+      .patch(
+        `/watchlist_media_items/${mediaWatchlistItem.id}.json`,
+        {
+          watched: true,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token":
+              document
+                .querySelector('meta[name="csrf-token"]')
+                ?.getAttribute("content") || "",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        window.location.reload();
       })
       .catch((error) => {
         console.error(error);
@@ -66,12 +112,13 @@ const Movie: React.FC<MediaShowProps> = ({ media }) => {
             pressed={media.watchlistStatus.inSharedWatchlist}
             icon={listIcon}
             onClick={() => {
-              console.log(media.watchlistStatus.inSharedWatchlist);
               !media.watchlistStatus.inSharedWatchlist
                 ? addToList(media)
                 : media.watchlistStatus.inPersonalWatchlist
-                ? removeFromList(media)
-                : console.log("cant remove shared watchlist item");
+                ? removeFromList(
+                    media.watchlistStatus.personalWatchlistMediaItem
+                  )
+                : console.log("can't remove shared watchlist item");
             }}
           />
         </div>
@@ -88,7 +135,10 @@ const Movie: React.FC<MediaShowProps> = ({ media }) => {
               pressed={false}
               icon={<TvIcon height={20} width={20} />}
               onClick={() => {
-                console.log("watch");
+                markAsWatchedOrUnWatched(
+                  media.watchlistStatus.sharedWatchlistMediaItem,
+                  
+                );
               }}
             />
           )}
