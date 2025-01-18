@@ -53,7 +53,7 @@ const Nav: React.FC<NavProps> = ({ searchPagePath, display }) => {
 
   async function logout() {
     await fetch("/users/sign_out", {
-      method: "DELETE",
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         "X-CSRF-Token":
@@ -111,6 +111,7 @@ const Nav: React.FC<NavProps> = ({ searchPagePath, display }) => {
         itemListClassName={"flex flex-col overflow-y-auto"}
       >
         <a href="/analytics">Analytics</a>
+        <a href="/users/edit">Account</a>
         <span onClick={logout}>Logout</span>
       </Menu>
     </>

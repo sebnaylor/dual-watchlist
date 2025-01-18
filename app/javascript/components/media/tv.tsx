@@ -4,8 +4,10 @@ import Button from "../shared/Button";
 import Ratings from "../shared/Ratings";
 import Backdrop from "./backdrop";
 import axios from "axios";
+import { TickIcon, PlusIcon, TvIcon } from "../shared/icons";
 
 const Tv: React.FC<MediaShowProps> = ({ media }) => {
+  console.log(media);
   async function addToList(media: MediaShowProps["media"]) {
     await axios
       .post(`/media/${media.tmdbId}/add_to_personal_watchlist.json`, {
@@ -20,6 +22,12 @@ const Tv: React.FC<MediaShowProps> = ({ media }) => {
       });
   }
 
+  const listIcon = media.watchlistStatus.inSharedWatchlist ? (
+    <TickIcon height={20} width={20} />
+  ) : (
+    <PlusIcon height={20} width={20} />
+  );
+
   return (
     <>
       <div className="flex flex-col gap-y-2 mb-2">
@@ -33,9 +41,12 @@ const Tv: React.FC<MediaShowProps> = ({ media }) => {
             }
             type="primary"
             pressed={media.watchlistStatus.inPersonalWatchlist}
-            icon="plus"
+            icon={listIcon}
             onClick={() => {
-              addToList(media);
+              console.log(media.watchlistStatus.inSharedWatchlist);
+              !media.watchlistStatus.inSharedWatchlist
+                ? addToList(media)
+                : console.log("remove from list");
             }}
           />
         </div>
@@ -48,7 +59,7 @@ const Tv: React.FC<MediaShowProps> = ({ media }) => {
               text="Watch"
               type="secondary"
               pressed={false}
-              icon="tv"
+              icon={<TvIcon height={20} width={20} />}
               onClick={() => {
                 console.log("watch");
               }}

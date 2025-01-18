@@ -5,6 +5,7 @@ import { ratingsType } from "../home/types";
 
 export interface MediaShowProps {
   media: {
+    inSharedWatchlist(inSharedWatchlist: any): [any, any];
     type: string;
     adult: boolean;
     backdropPath: string;
@@ -28,6 +29,13 @@ export interface MediaShowProps {
     tmdbVoteCount: string | null;
     watchlistStatus: {
       inPersonalWatchlist: boolean;
+      personalWatchlistMediaItem: {
+        personalWatchlistMediaItemId: number;
+      };
+      inSharedWatchlist: boolean;
+      sharedWatchlistMediaItem: {
+        sharedWatchlistMediaItemId: number;
+      };
     };
   };
   errors: string | null;

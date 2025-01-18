@@ -14,20 +14,18 @@ export interface ratingsType {
 }
 
 export interface watchlistTypes {
-  watchlist_items: {
-    movies: {
-      mediaType: string;
-      mediaItemId: number;
-      mediaTmdbId: number;
-      title: string;
-      posterImg: string;
-    }[];
-    tv: {
-      mediaType: string;
-      mediaItemId: number;
-      mediaTmdbId: number;
-      title: string;
-      posterImg: string;
-    }[];
-  };
+  movies: {
+    mediaType: string;
+    mediaItemId: number;
+    mediaTmdbId: number;
+    title: string;
+    posterImg: string;
+  }[];
+  tv: {
+    mediaType: string;
+    mediaItemId: number;
+    mediaTmdbId: number;
+    title: string;
+    posterImg: string;
+  }[];
 }

@@ -1,15 +1,11 @@
 import React, { useState } from "react";
 import { watchlistTypes } from "./types";
-import ShareIcon from "../shared/icons";
-import Button from "../shared/Button";
 
 export interface WatchlistProps {
-  watchlistItems: watchlistTypes["watchlist_items"];
+  watchlistItems: watchlistTypes;
 }
 
 const Watchlist: React.FC<WatchlistProps> = ({ watchlistItems }) => {
-  const [personalWatchlistChecked, setPersonalWatchlistChecked] =
-    useState(false);
   console.log(watchlistItems);
 
   return (

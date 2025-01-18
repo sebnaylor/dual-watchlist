@@ -7,11 +7,9 @@ class SearchResponsePresenter < BasePresenter
   end
 
   def props
-    {
-      test: search_response.map do |media_response|
-        media(media_response)
-      end
-    }
+    { media: search_response.map do |media_response|
+      media(media_response)
+    end }
   end
 
   private

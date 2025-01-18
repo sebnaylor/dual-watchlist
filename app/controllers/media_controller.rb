@@ -22,6 +22,17 @@ class MediaController < ApplicationController
     end
   end
 
+  def remove_from_personal_watchlist
+    media_to_remove = existing_media
+    PersonalWatchlistMediaItem.find_by(personal_watchlist: PersonalWatchlist.find_by(user: current_user), media: media_to_remove).destroy
+
+    respond_to do |format|
+      format.json { render json: { success: true } }
+    rescue ActiveRecord::RecordInvalid => e
+      format.json { render json: { success: false, message: e.errors.messages } }
+    end
+  end
+
   private
 
   def media_type_params

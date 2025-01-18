@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { registrations: 'users/registrations' }
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -26,4 +26,5 @@ Rails.application.routes.draw do
 
   get 'media/:id', to: 'media#show', as: :media_tmdb
   post 'media/:id/add_to_personal_watchlist', to: 'media#add_to_personal_watchlist', as: :add_to_personal_watchlist
+  delete 'media/:id/remove_from_personal_watchlist', to: 'media#remove_from_personal_watchlist', as: :remove_from_personal_watchlist
 end

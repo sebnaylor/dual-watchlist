@@ -39,6 +39,8 @@ gem 'dotenv-rails'
 gem 'themoviedb'
 gem 'omdb-api', '~> 1.0.0'
 gem "tailwindcss-rails"
+gem 'image_processing', '~> 1.12'
+gem "aws-sdk-s3", require: false
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

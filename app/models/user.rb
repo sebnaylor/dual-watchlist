@@ -5,6 +5,9 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
           :recoverable, :rememberable, :validatable
+  has_one_attached :image do |attachable|
+    attachable.variant :thumb, resize_to_limit: [100, nil]
+  end
 
   has_one :personal_watchlist, dependent: :destroy
   has_many :personal_watchlist_media_items, through: :personal_watchlist, source: :media_items

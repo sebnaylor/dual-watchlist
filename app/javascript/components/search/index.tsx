@@ -12,13 +12,15 @@ export interface MediaProps {
 }
 [];
 
-export interface MediaProps {
-  test: Media[];
+export interface SearchResponseProps {
+  media: MediaProps[];
 }
 
 const Search: React.FC<SearchProps> = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [mediaResponse, setMediaResponse] = useState<MediaProps>(null);
+  const [mediaResponse, setMediaResponse] = useState<SearchResponseProps>({
+    media: [],
+  });
 
   async function search(searchTerm: string) {
     await axios
@@ -43,7 +45,7 @@ const Search: React.FC<SearchProps> = () => {
     <div>
       <div className="grid grid-cols-3 grid-rows-3">
         {!!mediaResponse &&
-          mediaResponse.test.map((media, index) => {
+          mediaResponse.media.map((media, index) => {
             return (
               <div
                 onClick={() => {
@@ -58,7 +60,7 @@ const Search: React.FC<SearchProps> = () => {
                     "https://dual-watchlist.s3.eu-north-1.amazonaws.com/poster-not-found.png"
                   }
                   fallback={<Shimmer width={137} height={190} />}
-                />
+                />1
               </div>
             );
           })}
