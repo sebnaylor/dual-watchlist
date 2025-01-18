@@ -24,3 +24,33 @@ input::placeholder {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
 }
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+.danger-button {
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  background-color: rgb(225 29 72);
+  color: white;
+  border: 1px solid #f8f8f8;
+  cursor: pointer;
+}
+
+a {
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  background-color: rgb(254 205 211);
+  color: white;
+  border: 1px solid #f8f8f8;
+  cursor: pointer;
+}

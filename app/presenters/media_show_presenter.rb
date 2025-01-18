@@ -89,7 +89,7 @@ class MediaShowPresenter < BasePresenter
     return unless shared_watchlist_media_item
 
     {
-      personal_watchlist_media_item_id: shared_watchlist_media_item.id
+      shared_watchlist_media_item_id: shared_watchlist_media_item.id
     }
   end
 end
