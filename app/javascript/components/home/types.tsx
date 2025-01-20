@@ -20,6 +20,7 @@ export interface watchlistTypes {
     mediaTmdbId: number;
     title: string;
     posterImg: string;
+    watched: boolean;
   }[];
   tv: {
     mediaType: string;
@@ -27,5 +28,6 @@ export interface watchlistTypes {
     mediaTmdbId: number;
     title: string;
     posterImg: string;
+    watched: boolean;
   }[];
 }

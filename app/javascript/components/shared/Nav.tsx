@@ -1,5 +1,4 @@
 import React from "react";
-import classNames from "classnames";
 import { slide as Menu } from "react-burger-menu";
 
 export interface NavProps {
@@ -82,7 +81,7 @@ const Nav: React.FC<NavProps> = ({ searchPagePath, display }) => {
           alt="logo"
         />
         <h1
-          className="text-4xl cursor-pointer"
+          className="text-3xl cursor-pointer"
           onClick={() => {
             window.location.href = "/";
           }}
@@ -93,7 +92,7 @@ const Nav: React.FC<NavProps> = ({ searchPagePath, display }) => {
           onClick={() => {
             window.location.href = searchPagePath;
           }}
-          className="cursor-pointer px-2"
+          className="absolute right-10 cursor-pointer px-2"
         >
           <img
             className="inline object-cover w-10 h-10 rounded-full"
@@ -101,7 +100,7 @@ const Nav: React.FC<NavProps> = ({ searchPagePath, display }) => {
             alt="Search"
           />
         </div>
-        <span className="w-9 whitespace-normal"></span>
+        <span className="w-[6rem] whitespace-normal"></span>
       </div>
       <Menu
         disableAutoFocus

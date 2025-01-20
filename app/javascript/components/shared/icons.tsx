@@ -117,4 +117,69 @@ const TvIcon: React.FC<IconProps> = ({ width = 20, height = 20 }) => {
   );
 };
 
-export { ShareIcon, TickIcon, PlusIcon, TvIcon };
+const TooltipIcon: React.FC<IconProps> = ({ width = 20, height = 20 }) => {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 29 37"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M13.144 32V16.8H16.024V32H13.144ZM14.584 13.76C14.0507 13.76 13.6133 13.5893 13.272 13.248C12.9307 12.8853 12.76 12.4373 12.76 11.904C12.76 11.392 12.9307 10.9653 13.272 10.624C13.6133 10.2613 14.0507 10.08 14.584 10.08C15.1173 10.08 15.5547 10.2613 15.896 10.624C16.2373 10.9653 16.408 11.392 16.408 11.904C16.408 12.4373 16.2373 12.8853 15.896 13.248C15.5547 13.5893 15.1173 13.76 14.584 13.76Z"
+        fill="white"
+      />
+      <path
+        d="M28.5 21C28.5 28.4395 22.2487 34.5 14.5 34.5C6.75133 34.5 0.5 28.4395 0.5 21C0.5 13.5605 6.75133 7.5 14.5 7.5C22.2487 7.5 28.5 13.5605 28.5 21Z"
+        stroke="white"
+      />
+    </svg>
+  );
+};
+
+const HeartIconFilled: React.FC<IconProps> = ({ width = 20, height = 20 }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      viewBox="0 0 16 16"
+      id="heart"
+    >
+      <path
+        fill="#f05542"
+        d="M5.301 3.002c-.889-.047-1.759.247-2.404.893-1.29 1.292-1.175 3.49.26 4.926l.515.515L8.332 14l4.659-4.664.515-.515c1.435-1.437 1.55-3.634.26-4.926-1.29-1.292-3.483-1.175-4.918.262l-.516.517-.517-.517C7.098 3.438 6.19 3.049 5.3 3.002z"
+      ></path>
+    </svg>
+  );
+};
+
+const HeartIconOutline: React.FC<IconProps> = ({ width = 20, height = 20 }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      viewBox="0 0 16 16"
+      id="heart"
+    >
+      <path
+        fill="none"
+        stroke="#000000"
+        strokeWidth="1"
+        d="M5.301 3.002c-.889-.047-1.759.247-2.404.893-1.29 1.292-1.175 3.49.26 4.926l.515.515L8.332 14l4.659-4.664.515-.515c1.435-1.437 1.55-3.634.26-4.926-1.29-1.292-3.483-1.175-4.918.262l-.516.517-.517-.517C7.098 3.438 6.19 3.049 5.3 3.002z"
+      ></path>
+    </svg>
+  );
+};
+
+export {
+  ShareIcon,
+  TickIcon,
+  PlusIcon,
+  TvIcon,
+  TooltipIcon,
+  HeartIconFilled,
+  HeartIconOutline,
+};

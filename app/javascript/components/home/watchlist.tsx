@@ -13,23 +13,48 @@ const Watchlist: React.FC<WatchlistProps> = ({ watchlistItems }) => {
       </div>
       <h3 className="text-white text-lg font-medium">Movies</h3>
       <div className="flex flex-no-wrap gap-x-2 py-2 overflow-x-scroll scrolling-touch items-start">
-        {watchlistItems["movies"].map((item) => (
-          <div className="flex-none rounded-lg w-28" key={item.mediaItemId}>
-            <a href={`/media/${item.mediaTmdbId}?media_type=${item.mediaType}`}>
-              <img src={item.posterImg} alt={item.title} />
-            </a>
-          </div>
-        ))}
+        {watchlistItems["movies"].map(
+          (item) =>
+            !item.watched && (
+              <div className="flex-none rounded-lg w-28" key={item.mediaItemId}>
+                <a
+                  href={`/media/${item.mediaTmdbId}?media_type=${item.mediaType}`}
+                >
+                  <img src={item.posterImg} alt={item.title} />
+                </a>
+              </div>
+            )
+        )}
       </div>
       <h3 className="text-white text-lg font-medium">TV</h3>
       <div className="flex flex-no-wrap gap-x-2 py-2 overflow-x-scroll scrolling-touch items-start">
-        {watchlistItems["tv"].map((item) => (
-          <div className="flex-none rounded-lg w-28" key={item.mediaItemId}>
-            <a href={`/media/${item.mediaTmdbId}?media_type=${item.mediaType}`}>
-              <img src={item.posterImg} alt={item.title} />
-            </a>
-          </div>
-        ))}
+        {watchlistItems["tv"].map(
+          (item) =>
+            !item.watched && (
+              <div className="flex-none rounded-lg w-28" key={item.mediaItemId}>
+                <a
+                  href={`/media/${item.mediaTmdbId}?media_type=${item.mediaType}`}
+                >
+                  <img src={item.posterImg} alt={item.title} />
+                </a>
+              </div>
+            )
+        )}
+      </div>
+      <h3 className="text-white text-lg font-medium">Recently Watched</h3>
+      <div className="flex flex-no-wrap gap-x-2 py-2 overflow-x-scroll scrolling-touch items-start">
+        {watchlistItems["tv"].concat(watchlistItems["movies"]).map(
+          (item) =>
+            item.watched && (
+              <div className="flex-none rounded-lg w-28" key={item.mediaItemId}>
+                <a
+                  href={`/media/${item.mediaTmdbId}?media_type=${item.mediaType}`}
+                >
+                  <img src={item.posterImg} alt={item.title} />
+                </a>
+              </div>
+            )
+        )}
       </div>
     </div>
   );

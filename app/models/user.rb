@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
           :recoverable, :rememberable, :validatable
   has_one_attached :image do |attachable|
@@ -16,6 +14,10 @@ class User < ApplicationRecord
 
   before_validation :generate_join_code, on: :create
   before_validation :create_watchlists, on: :create
+
+  def watchlist_partner
+    shared_watchlist&.users&.find { |user| user != self }
+  end
 
   private
 

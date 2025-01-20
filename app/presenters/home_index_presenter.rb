@@ -30,7 +30,8 @@ class HomeIndexPresenter < BasePresenter
             media_tmdb_id: media_item.media.tmdb_id,
             title: media_item.media.title,
             poster_img: media_item.media.poster_path,
-            user_image: media_item.user.image.attached? ? rails_blob_path(media_item.user.image, only_path: true) : nil
+            user_image: media_item.user.image.attached? ? rails_blob_path(media_item.user.image, only_path: true) : nil,
+            watched: media_item.watched
           }
         end.flatten.compact,
         tv: watchlisted_items.map do |media_item|
@@ -42,7 +43,8 @@ class HomeIndexPresenter < BasePresenter
             media_tmdb_id: media_item.media.tmdb_id,
             title: media_item.media.title,
             poster_img: media_item.media.poster_path,
-            user_image: media_item.user.image.attached? ? rails_blob_path(media_item.user.image, only_path: true) : nil
+            user_image: media_item.user.image.attached? ? rails_blob_path(media_item.user.image, only_path: true) : nil,
+            watched: media_item.watched
           }
         end.flatten.compact
       }

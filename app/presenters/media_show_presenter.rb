@@ -2,6 +2,9 @@
 
 class MediaShowPresenter < BasePresenter
   include MediaHelper
+  include ActionView::Helpers::AssetTagHelper
+  include Rails.application.routes.url_helpers
+  include ActiveStorage::Blob::Analyzable
   def initialize(media, media_type, errors, current_user)
     super()
     @media = media
@@ -64,8 +67,10 @@ class MediaShowPresenter < BasePresenter
     {
       in_personal_watchlist: media.in_personal_watchlist?(current_user),
       personal_watchlist_media_item: watchlist_media_item_props,
-      in_shared_watchlist: media.in_shared_watchlist?(current_user),
-      shared_watchlist_media_item: shared_watchlist_media_item_props
+      in_shared_watchlist: partners_watchlist_media_item.present?,
+      partners_watchlist_media_item: partners_watchlist_media_item_props,
+      user_image: image(current_user),
+      watchlist_partner_image: image(current_user.watchlist_partner)
     }
   end
 
@@ -73,23 +78,33 @@ class MediaShowPresenter < BasePresenter
     @watchlist_media_item ||= current_user.watchlist_media_items.find_by(media_id: media.id)
   end
 
-  def shared_watchlist_media_item
-    @shared_watchlist_media_item ||= current_user.shared_watchlist_media_items.find_by(media_id: media.id)
+  def partners_watchlist_media_item
+    return unless current_user.watchlist_partner
+
+    @partners_watchlist_media_item ||= current_user.watchlist_partner.personal_watchlist.media_items.find_by(media_id: media.id)
   end
 
   def watchlist_media_item_props
     return unless watchlist_media_item
 
     {
-      id: watchlist_media_item.id
+      id: watchlist_media_item.id,
+      watched: watchlist_media_item&.watched
     }
   end
 
-  def shared_watchlist_media_item_props
-    return unless shared_watchlist_media_item
+  def partners_watchlist_media_item_props
+    return unless partners_watchlist_media_item
 
     {
-      id: shared_watchlist_media_item.id
+      id: partners_watchlist_media_item.id,
+      watched: partners_watchlist_media_item&.watched
     }
+  end
+
+  def image(user)
+    return nil unless user&.image&.attached?
+
+    url_for(user.image.variant(resize_to_limit: [100, 100]))
   end
 end
