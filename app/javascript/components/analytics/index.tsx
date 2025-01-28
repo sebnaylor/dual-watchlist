@@ -180,7 +180,7 @@ const Analytics: React.FC<AnalyticsProps> = ({
                   analytics.chartData.watchedMovieRuntimeChart.conclusion
                     .nextUserToWatchImage
                 }
-                className="w-10 h-10 rounded-full"
+                className="w-10 h-10 rounded-full object-cover"
               />
             </div>
             <div className="flex items-center font-thin text-md">

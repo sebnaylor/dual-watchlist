@@ -204,8 +204,6 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
   };
 
   const renderStreamOptions = () => (
-    
-
     <div>
       <Text text="Streaming Options" type="h2" alignment="left" />
       {media.streamOptions.stream.length > 0 ? (
