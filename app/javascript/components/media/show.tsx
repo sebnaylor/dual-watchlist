@@ -15,7 +15,7 @@ import axios from "axios";
 import classNames from "classnames";
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
-import Text from "../shared/text";
+import Text from "../shared/Text";
 
 export interface MediaShowProps {
   media: {

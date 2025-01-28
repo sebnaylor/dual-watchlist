@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "../shared/Button";
 import axios, { Axios } from "axios";
-import Text from "../shared/text";
+import Text from "../shared/Text";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { CopyIcon, MergeIcon } from "../shared/icons";
 
