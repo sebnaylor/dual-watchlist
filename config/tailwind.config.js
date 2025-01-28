@@ -18,9 +18,10 @@ module.exports = {
       },
       colors: {
         backgroundBlack: "#1F1E20",
+        darkPurple: "#2c2638",
       },
       fontFamily: {
-        sans: ["Outfit", "sans-serif"], // Add the Google Font here
+        sans: ["Outfit", "sans-serif"],
       },
     },
   },

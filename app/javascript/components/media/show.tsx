@@ -12,6 +12,9 @@ import {
 import Ratings from "../shared/Ratings";
 import Backdrop from "./backdrop";
 import axios from "axios";
+import classNames from "classnames";
+import "react-tooltip/dist/react-tooltip.css";
+import { Tooltip } from "react-tooltip";
 
 export interface MediaShowProps {
   media: {
@@ -61,6 +64,10 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
     media.watchlistStatus.inSharedWatchlist
   );
 
+  const [afterInitialLoadErrors, setAfterInitialLoadErrors] = React.useState<
+    string | null
+  >(null);
+
   const listIcon = media.watchlistStatus.inSharedWatchlist ? (
     <TickIcon height={20} width={20} />
   ) : (
@@ -98,10 +105,15 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
   async function removeFromList(
     mediaWatchlistItem: MediaShowProps["media"]["watchlistStatus"]["personalWatchlistMediaItem"]
   ) {
-    console.log(mediaWatchlistItem);
     const csrfToken = document
       .querySelector('meta[name="csrf-token"]')
       ?.getAttribute("content");
+
+    if (isWatched) {
+      setAfterInitialLoadErrors(
+        "Cannot remove a watched item from the watchlist"
+      );
+    }
     await axios
       .delete(`/watchlist_media_items/${mediaWatchlistItem.id}.json`, {
         headers: {
@@ -153,7 +165,19 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
     media.watchlistStatus.personalWatchlistMediaItem?.watched ||
     media.watchlistStatus.partnersWatchlistMediaItem?.watched;
 
-  console.log(isWatched);
+  const inAnyWatchlist =
+    media.watchlistStatus.inPersonalWatchlist ||
+    media.watchlistStatus.inSharedWatchlist;
+
+  const tooltipText = () => {
+    if (media.type == "Tv") {
+      return "TV shows cannot be marked as watched. Once we add episodes, you might then";
+    } else if (!inAnyWatchlist) {
+      return "Add to your watchlist before marking as watched";
+    } else if (!isWatched) {
+      return "Press to mark as watched. It will appear in the analytics tab";
+    }
+  };
 
   const renderMedia = (media: MediaShowProps["media"]) => {
     return (
@@ -176,35 +200,46 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
               {media.watchlistStatus.inPersonalWatchlist && (
                 <img
                   src={media.watchlistStatus.userImage}
-                  className="w-10 h-10 rounded-full"
+                  className="w-10 h-10 rounded-full object-cover"
                 />
               )}
               {media.watchlistStatus.inSharedWatchlist && (
                 <img
                   src={media.watchlistStatus.watchlistPartnerImage}
-                  className="absolute top-0 -right-8 z-10 w-10 h-10 rounded-full"
+                  className={classNames(
+                    "absolute top-0 z-10 w-10 h-10 rounded-full",
+                    {
+                      "-right-8":
+                        media.watchlistStatus.inPersonalWatchlist &&
+                        media.watchlistStatus.inSharedWatchlist,
+                    }
+                  )}
                 />
               )}
             </div>
-            {media.watchlistStatus.inPersonalWatchlist && (
+            <div className="flex gap-x-2 items-center">
+              <a className="watch-icon">
+                <TooltipIcon width={20} height={20} />
+              </a>
               <Button
                 text={isWatched ? "Watched" : "Watch"}
                 type="secondary"
                 pressed={isWatched}
                 icon={<TvIcon height={20} width={20} />}
+                disabled={!inAnyWatchlist || media.type == "Tv"}
                 onClick={() => {
                   markAsWatchedOrUnWatched(
                     media.watchlistStatus.personalWatchlistMediaItem
                   );
                 }}
               />
-            )}
+            </div>
           </div>
         </div>
         <div className="relative">
           {media.backdropPath && <Backdrop backdropPath={media.backdropPath} />}
           <span
-            className="absolute bottom-2 right-2 px-4 py-2 bg-white rounded-full"
+            className="absolute bottom-2 right-2 p-2 bg-white rounded-full"
             onClick={() => {
               !media.watchlistStatus.inPersonalWatchlist
                 ? addToList(media)
@@ -214,18 +249,34 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
             }}
           >
             {media.watchlistStatus.inPersonalWatchlist ? (
-              <HeartIconFilled width={40} height={40} />
+              <HeartIconFilled width={30} height={30} />
             ) : (
-              <HeartIconOutline width={40} height={40} />
+              <HeartIconOutline width={30} height={30} />
             )}
           </span>
         </div>
         <div className="flex flex-col gap-y-2 px-2 mt-2">
+          {afterInitialLoadErrors && (
+            <div className="text-red-500">{afterInitialLoadErrors}</div>
+          )}
           <div className="px-2">
             {!!media.ratings && <Ratings ratings={media.ratings} />}
           </div>
           <div className="px-2">{media.overview}</div>
         </div>
+        <Tooltip
+          style={{
+            backgroundColor: "rgb(55 48 163)",
+            whiteSpace: "wrap",
+            maxWidth: "50%",
+            zIndex: 1000,
+            borderRadius: "1rem",
+          }}
+          anchorSelect=".watch-icon"
+          place="bottom"
+        >
+          {tooltipText()}
+        </Tooltip>
       </>
     );
   };

@@ -69,11 +69,11 @@ const Search: React.FC<SearchProps> = () => {
         <div className="w-full flex flex-col">
           <input
             placeholder="Search for a Movie or TV series"
-            className="w-full p-2 text-black text-center"
+            className="w-full p-2 text-black text-center drop-shadow-lg"
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="flex justify-center">
+        <div className="flex justify-center drop-shadow-lg">
           <Button
             text="Search"
             type="primary"

@@ -21,6 +21,7 @@ export interface watchlistTypes {
     title: string;
     posterImg: string;
     watched: boolean;
+    userImage: string;
   }[];
   tv: {
     mediaType: string;
@@ -29,5 +30,6 @@ export interface watchlistTypes {
     title: string;
     posterImg: string;
     watched: boolean;
+    userImage: string;
   }[];
 }

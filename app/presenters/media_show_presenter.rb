@@ -105,6 +105,6 @@ class MediaShowPresenter < BasePresenter
   def image(user)
     return nil unless user&.image&.attached?
 
-    url_for(user.image.variant(resize_to_limit: [100, 100]))
+    url_for(user.image)
   end
 end

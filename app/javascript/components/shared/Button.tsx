@@ -1,11 +1,12 @@
 import React from "react";
 import classNames from "classnames";
 
-export interface ButtonProps {
+interface ButtonProps {
   text: string;
   type: "primary" | "secondary" | "tertiary";
   pressed: boolean;
   icon: React.ReactNode | null;
+  disabled?: boolean;
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -14,13 +15,15 @@ const Button: React.FC<ButtonProps> = ({
   type,
   pressed,
   icon,
+  disabled = false,
   onClick,
 }) => {
   return (
     <button
       className={classNames(
-        "inline-flex items-center gap-x-2 px-2 py-1 rounded-2xl min-w-28",
+        "inline-flex items-center justify-center gap-x-2 px-2 py-1 rounded-2xl min-w-28",
         {
+          "opacity-50 bg-gray-500": disabled,
           "justify-center": !icon,
           "bg-emerald-800 border border-emerald-600":
             type === "primary" && pressed,
@@ -31,6 +34,7 @@ const Button: React.FC<ButtonProps> = ({
         }
       )}
       onClick={onClick}
+      disabled={disabled}
     >
       {icon}
       {text}

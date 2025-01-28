@@ -33,6 +33,39 @@ h2 {
   font-size: 1.5rem;
 }
 
+.primary-button {
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  background-color: rgb(6 95 70);
+  color: white;
+  border: 1px solid #f8f8f8;
+  cursor: pointer;
+}
+
+.secondary-button {
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  background-color: rgb(6 95 70 / 20%);
+  color: white;
+  border: 1px solid #f8f8f8;
+  cursor: pointer;
+}
+
+.tertiary-button {
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  background-color: rgb(0 0 0 / 0%);
+  color: black;
+  border: 1px solid #f8f8f8;
+  cursor: pointer;
+}
+
 .danger-button {
   font-weight: 500;
   font-size: 1rem;

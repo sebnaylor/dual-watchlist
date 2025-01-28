@@ -18,6 +18,8 @@ class WatchlistMediaItemsController < ApplicationController
     partners_watchlist_media_item = current_user.watchlist_partner.watchlist_media_items.find_by(media_id: watchlist_media_item.media_id)
 
     [watchlist_media_item, partners_watchlist_media_item].each do |media_item|
+      next unless media_item
+
       media_item.update(watchlist_media_item_params)
     end
 

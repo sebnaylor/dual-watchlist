@@ -9,7 +9,10 @@ const Ratings: React.FC<RatingsProps> = ({ ratings }) => {
   return (
     <div className="flex justify-center gap-x-2">
       {ratings.map((rating, index) => (
-        <div key={index} className="flex gap-x-2 text-white text-xs font-bold">
+        <div
+          key={index}
+          className="flex gap-x-2 text-white text-xs font-bold drop-shadow-lg"
+        >
           <img
             src={rating.icon}
             alt={rating.source}

@@ -1,5 +1,6 @@
 import React from "react";
 import { slide as Menu } from "react-burger-menu";
+import { SearchIcon } from "./icons";
 
 export interface NavProps {
   searchPagePath: string;
@@ -79,6 +80,9 @@ const Nav: React.FC<NavProps> = ({ searchPagePath, display }) => {
           className="object-contain w-12"
           src="https://dual-watchlist.s3.eu-north-1.amazonaws.com/logo.png"
           alt="logo"
+          onClick={() => {
+            window.location.href = "/";
+          }}
         />
         <h1
           className="text-3xl cursor-pointer"
@@ -92,13 +96,9 @@ const Nav: React.FC<NavProps> = ({ searchPagePath, display }) => {
           onClick={() => {
             window.location.href = searchPagePath;
           }}
-          className="absolute right-10 cursor-pointer px-2"
+          className="absolute right-11 cursor-pointer px-2"
         >
-          <img
-            className="inline object-cover w-10 h-10 rounded-full"
-            src="https://dual-watchlist.s3.eu-north-1.amazonaws.com/Search.png"
-            alt="Search"
-          />
+          <SearchIcon height={40} width={40} />
         </div>
         <span className="w-[6rem] whitespace-normal"></span>
       </div>
@@ -109,8 +109,8 @@ const Nav: React.FC<NavProps> = ({ searchPagePath, display }) => {
         styles={styles}
         itemListClassName={"flex flex-col overflow-y-auto"}
       >
-        <a href="/analytics">Analytics</a>
         <a href="/users/edit">Account</a>
+        <a href="/analytics">Watchlist Connect</a>
         <span onClick={logout}>Logout</span>
       </Menu>
     </>
