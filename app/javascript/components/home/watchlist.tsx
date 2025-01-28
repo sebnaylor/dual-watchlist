@@ -28,12 +28,6 @@ const Watchlist: React.FC<WatchlistProps> = ({ watchlistItems }) => {
                   href={`/media/${item.mediaTmdbId}?media_type=${item.mediaType}`}
                 >
                   <img src={item.posterImg} alt={item.title} />
-                  <img
-                    src={item.userImage}
-                    className="absolute top-1 right-1 rounded-full object-contain drop-shadow-lg"
-                    width={30}
-                    height={30}
-                  />
                 </a>
               </div>
             )
@@ -52,12 +46,6 @@ const Watchlist: React.FC<WatchlistProps> = ({ watchlistItems }) => {
                   href={`/media/${item.mediaTmdbId}?media_type=${item.mediaType}`}
                 >
                   <img src={item.posterImg} alt={item.title} />
-                  <img
-                    src={item.userImage}
-                    className="absolute top-1 right-1 rounded-full object-contain drop-shadow-lg"
-                    width={30}
-                    height={30}
-                  />
                 </a>
               </div>
             )
@@ -79,12 +67,6 @@ const Watchlist: React.FC<WatchlistProps> = ({ watchlistItems }) => {
                       href={`/media/${item.mediaTmdbId}?media_type=${item.mediaType}`}
                     >
                       <img src={item.posterImg} alt={item.title} />
-                      <img
-                        src={item.userImage}
-                        className="absolute top-1 right-1 rounded-full object-contain drop-shadow-lg"
-                        width={30}
-                        height={30}
-                      />
                     </a>
                   </div>
                 )

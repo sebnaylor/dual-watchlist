@@ -31,6 +31,7 @@ const Button: React.FC<ButtonProps> = ({
           "bg-indigo-500": type == "secondary",
           "bg-indigo-800 border border-indigo-600":
             type == "secondary" && pressed,
+          "bg-gray-500": type == "tertiary",
         }
       )}
       onClick={onClick}

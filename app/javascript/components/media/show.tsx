@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ratingsType } from "../home/types";
 import Button from "../shared/Button";
 import {
@@ -15,6 +15,7 @@ import axios from "axios";
 import classNames from "classnames";
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
+import Text from "../shared/text";
 
 export interface MediaShowProps {
   media: {
@@ -35,6 +36,29 @@ export interface MediaShowProps {
     revenue: number;
     runtime: number;
     status: string;
+    streamOptions: {
+      buy:
+        | {
+            logoPath: string;
+            providerName: string;
+            error?: string;
+          }[]
+        | [];
+      stream:
+        | {
+            logoPath: string;
+            providerName: string;
+            error?: string;
+          }[]
+        | [];
+      rent:
+        | {
+            logoPath: string;
+            providerName: string;
+            error?: string;
+          }[]
+        | [];
+    };
     tagline: string;
     tmdbId: number;
     tmdbVoteAverage: string | null;
@@ -59,12 +83,11 @@ export interface MediaShowProps {
 
 const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
   console.log(media, errors);
-
-  const [pressedListButton, setPressedListButton] = React.useState(
+  const [pressedListButton, setPressedListButton] = useState(
     media.watchlistStatus.inSharedWatchlist
   );
 
-  const [afterInitialLoadErrors, setAfterInitialLoadErrors] = React.useState<
+  const [afterInitialLoadErrors, setAfterInitialLoadErrors] = useState<
     string | null
   >(null);
 
@@ -113,6 +136,7 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
       setAfterInitialLoadErrors(
         "Cannot remove a watched item from the watchlist"
       );
+      return;
     }
     await axios
       .delete(`/watchlist_media_items/${mediaWatchlistItem.id}.json`, {
@@ -175,65 +199,106 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
     } else if (!inAnyWatchlist) {
       return "Add to your watchlist before marking as watched";
     } else if (!isWatched) {
-      return "Press to mark as watched. It will appear in the analytics tab";
+      return "Press to mark as watched. It will appear in the Watchlist Connect page";
     }
   };
 
+  const renderStreamOptions = () => (
+    
+
+    <div>
+      <Text text="Streaming Options" type="h2" alignment="left" />
+      {media.streamOptions.stream.length > 0 ? (
+        <div className="flex flex-col gap-y-2">
+          {media.streamOptions.stream.map((streamOption) => (
+            <div key={streamOption.providerName} className="flex gap-x-2">
+              <img
+                src={streamOption.logoPath}
+                className="w-8 h-8 object-cover"
+              />
+              <Text text={streamOption.providerName} type="p" />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <Text text="No streaming options available" type="p" alignment="left" />
+      )}
+    </div>
+  );
+
+  const renderHeader = () => (
+    <div className="flex justify-between items-center">
+      <Text text={media.title || media.name} type={"h1"} alignment="left" />
+    </div>
+  );
+
+  const renderDetails = () => (
+    <div className="flex justify-between items-center">
+      <div className="flex gap-x-2">
+        <span>{media.releaseDate}</span>
+        <span className="font-thin">{media.adult ? "15+" : "U - 12"}</span>
+        <span>{media.runtime} minutes</span>
+      </div>
+    </div>
+  );
+
+  const renderWatchlistStatus = () => (
+    <div className="flex gap-x-2 items-center">
+      {inAnyWatchlist && <HeartIconFilled width={30} height={30} />}
+      <div className="relative flex">
+        {media.watchlistStatus.inPersonalWatchlist && (
+          <div className="w-10 h-10 rounded-full overflow-hidden">
+            <img
+              src={media.watchlistStatus.userImage}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        )}
+        {media.watchlistStatus.inSharedWatchlist && (
+          <div
+            className={classNames(
+              "w-10 h-10 rounded-full overflow-hidden z-10 -left-2 relative"
+            )}
+          >
+            <img
+              src={media.watchlistStatus.watchlistPartnerImage}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  const renderActions = () => (
+    <div className="flex gap-x-2 items-center">
+      <a className="watch-icon">
+        <TooltipIcon width={20} height={20} />
+      </a>
+      <Button
+        text={isWatched ? "Watched" : "Watch"}
+        type="secondary"
+        pressed={isWatched}
+        icon={<TvIcon height={20} width={20} />}
+        disabled={!inAnyWatchlist || media.type == "Tv"}
+        onClick={() => {
+          markAsWatchedOrUnWatched(
+            media.watchlistStatus.personalWatchlistMediaItem
+          );
+        }}
+      />
+    </div>
+  );
+
   const renderMedia = (media: MediaShowProps["media"]) => {
     return (
-      <>
-        <div className="flex flex-col gap-y-2 px-2 mb-2">
+      <div className="px-2">
+        <div className="flex flex-col gap-y-2 mb-2">
+          {renderHeader()}
+          {renderDetails()}
           <div className="flex justify-between items-center">
-            <span className="text-2xl">{media.title || media.name}</span>
-          </div>
-          <div className="flex justify-between items-center">
-            <div className="flex gap-x-2">
-              <span>{media.releaseDate}</span>
-              <span className="font-thin">
-                {media.adult ? "15+" : "U - 12"}
-              </span>
-              <span>{media.runtime} minutes</span>
-            </div>
-          </div>
-          <div className="flex justify-between items-center">
-            <div className="relative">
-              {media.watchlistStatus.inPersonalWatchlist && (
-                <img
-                  src={media.watchlistStatus.userImage}
-                  className="w-10 h-10 rounded-full object-cover"
-                />
-              )}
-              {media.watchlistStatus.inSharedWatchlist && (
-                <img
-                  src={media.watchlistStatus.watchlistPartnerImage}
-                  className={classNames(
-                    "absolute top-0 z-10 w-10 h-10 rounded-full",
-                    {
-                      "-right-8":
-                        media.watchlistStatus.inPersonalWatchlist &&
-                        media.watchlistStatus.inSharedWatchlist,
-                    }
-                  )}
-                />
-              )}
-            </div>
-            <div className="flex gap-x-2 items-center">
-              <a className="watch-icon">
-                <TooltipIcon width={20} height={20} />
-              </a>
-              <Button
-                text={isWatched ? "Watched" : "Watch"}
-                type="secondary"
-                pressed={isWatched}
-                icon={<TvIcon height={20} width={20} />}
-                disabled={!inAnyWatchlist || media.type == "Tv"}
-                onClick={() => {
-                  markAsWatchedOrUnWatched(
-                    media.watchlistStatus.personalWatchlistMediaItem
-                  );
-                }}
-              />
-            </div>
+            {renderWatchlistStatus()}
+            {renderActions()}
           </div>
         </div>
         <div className="relative">
@@ -255,15 +320,17 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
             )}
           </span>
         </div>
-        <div className="flex flex-col gap-y-2 px-2 mt-2">
+        <div className="flex flex-col gap-y-2 mt-2">
           {afterInitialLoadErrors && (
             <div className="text-red-500">{afterInitialLoadErrors}</div>
           )}
-          <div className="px-2">
-            {!!media.ratings && <Ratings ratings={media.ratings} />}
-          </div>
-          <div className="px-2">{media.overview}</div>
+          <div>{!!media.ratings && <Ratings ratings={media.ratings} />}</div>
+          <div>{media.overview}</div>
         </div>
+        <br />
+        <hr />
+        <br />
+        {renderStreamOptions()}
         <Tooltip
           style={{
             backgroundColor: "rgb(55 48 163)",
@@ -277,7 +344,7 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
         >
           {tooltipText()}
         </Tooltip>
-      </>
+      </div>
     );
   };
 

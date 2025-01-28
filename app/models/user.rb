@@ -34,6 +34,10 @@ class User < ApplicationRecord
     errors.add(:image, 'must be a JPEG or PNG')
   end
 
+  def profile_image
+    image.attached? ? Rails.application.routes.url_helpers.rails_blob_url(image, only_path: true) : nil
+  end
+
   def watchlist_partner
     shared_watchlist&.users&.find { |user| user != self }
   end

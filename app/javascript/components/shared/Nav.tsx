@@ -85,7 +85,7 @@ const Nav: React.FC<NavProps> = ({ searchPagePath, display }) => {
           }}
         />
         <h1
-          className="text-3xl cursor-pointer"
+          className="text-2xl cursor-pointer font-titleFont whitespace-nowrap"
           onClick={() => {
             window.location.href = "/";
           }}

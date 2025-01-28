@@ -45,7 +45,8 @@ class AnalyticsPresenter < BasePresenter
           conclusion: {
             title: movie_pie_chart_title,
             subtitle: movie_pie_chart_subtitle,
-            next_user_to_watch_image: user_with_lowest_runtime.image.url
+            next_user_to_watch_image: user_with_lowest_runtime&.profile_image,
+            runtime_difference: runtime_difference
           }
         }
       }
@@ -67,7 +68,13 @@ class AnalyticsPresenter < BasePresenter
   end
 
   def movie_pie_chart_title
+    return "You're all equal!" if runtime_difference.zero?
+
     "It's time for #{user_with_lowest_runtime.full_name} to choose the next movie!"
+  end
+
+  def runtime_difference
+    @runtime_difference ||= (user_with_highest_runtime.total_watched_movie_runtime - user_with_lowest_runtime.total_watched_movie_runtime).abs
   end
 
   def user_with_highest_runtime
@@ -79,7 +86,7 @@ class AnalyticsPresenter < BasePresenter
   end
 
   def movie_pie_chart_subtitle
-    runtime_difference = (user_with_highest_runtime.total_watched_movie_runtime - user_with_lowest_runtime.total_watched_movie_runtime).abs
+    return "You're all equal!" if runtime_difference.zero?
 
     "They're #{runtime_difference} minutes behind"
   end

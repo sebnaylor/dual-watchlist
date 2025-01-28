@@ -22,6 +22,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ["Outfit", "sans-serif"],
+        titleFont: ["IBM Plex Mono", "monospace"],
       },
     },
   },

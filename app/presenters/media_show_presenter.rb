@@ -46,6 +46,7 @@ class MediaShowPresenter < BasePresenter
       revenue: media['revenue'],
       runtime: media['runtime'],
       status: media['status'],
+      stream_options: stream_options,
       tagline: media['tagline'],
       title: media['title'],
       tmdb_vote_average: media['vote_average'],
@@ -69,8 +70,8 @@ class MediaShowPresenter < BasePresenter
       personal_watchlist_media_item: watchlist_media_item_props,
       in_shared_watchlist: partners_watchlist_media_item.present?,
       partners_watchlist_media_item: partners_watchlist_media_item_props,
-      user_image: image(current_user),
-      watchlist_partner_image: image(current_user.watchlist_partner)
+      user_image: current_user.profile_image,
+      watchlist_partner_image: current_user.watchlist_partner.profile_image
     }
   end
 
@@ -102,9 +103,43 @@ class MediaShowPresenter < BasePresenter
     }
   end
 
-  def image(user)
-    return nil unless user&.image&.attached?
+  def stream_options # rubocop:disable Metrics/MethodLength
+    tmdb_id = media.is_a?(Media) ? media.tmdb_id : media['id']
 
-    url_for(user.image)
+    response = HTTParty.get("https://api.themoviedb.org/3/#{media_type.downcase}/#{tmdb_id}/watch/providers?api_key=#{ENV.fetch('TMDB_API_KEY')}")
+    unless response.code == 200
+      return {
+        buy: [],
+        stream: [],
+        rent: [],
+        error: 'Error finding stream options'
+      }
+    end
+
+    uk_results = response['results']['GB']
+    unless uk_results
+      return {
+        buy: [],
+        stream: [],
+        rent: [],
+        error: 'No UK stream options available'
+      }
+    end
+    {
+      buy: map_media_providers(uk_results, 'buy'),
+      stream: map_media_providers(uk_results, 'flatrate'),
+      rent: map_media_providers(uk_results, 'rent')
+    }
+  end
+
+  def map_media_providers(uk_results, providers)
+    return [] unless uk_results[providers]
+
+    uk_results[providers].map do |provider|
+      {
+        logo_path: tmdb_image_path(provider['logo_path']),
+        provider_name: provider['provider_name']
+      }
+    end
   end
 end
