@@ -71,7 +71,9 @@ class MediaShowPresenter < BasePresenter
       in_shared_watchlist: partners_watchlist_media_item.present?,
       partners_watchlist_media_item: partners_watchlist_media_item_props,
       user_image: current_user.profile_image,
-      watchlist_partner_image: current_user.watchlist_partner&.profile_image
+      user_initials: current_user.initials,
+      watchlist_partner_image: current_user.watchlist_partner&.profile_image,
+      waatchlist_partner_initials: current_user.watchlist_partner&.initials
     }
   end
 

@@ -75,7 +75,9 @@ export interface MediaShowProps {
         watched: boolean;
       };
       userImage: string;
+      userInitials: string;
       watchlistPartnerImage: string;
+      watchlistPartnerInitials: string;
     };
   };
   errors: string | null;
@@ -246,10 +248,16 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
       <div className="relative flex">
         {media.watchlistStatus.inPersonalWatchlist && (
           <div className="w-10 h-10 rounded-full overflow-hidden">
-            <img
-              src={media.watchlistStatus.userImage}
-              className="w-full h-full object-cover"
-            />
+            {!!media.watchlistStatus.userImage ? (
+              <img
+                src={media.watchlistStatus.userImage}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                {media.watchlistStatus.userInitials}
+              </div>
+            )}
           </div>
         )}
         {media.watchlistStatus.inSharedWatchlist && (
@@ -258,10 +266,16 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
               "w-10 h-10 rounded-full overflow-hidden z-10 -left-2 relative"
             )}
           >
-            <img
-              src={media.watchlistStatus.watchlistPartnerImage}
-              className="w-full h-full object-cover"
-            />
+            {!!media.watchlistStatus.watchlistPartnerImage ? (
+              <img
+                src={media.watchlistStatus.watchlistPartnerImage}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center text-white font-bold">
+                {media.watchlistStatus.watchlistPartnerInitials}
+              </div>
+            )}
           </div>
         )}
       </div>

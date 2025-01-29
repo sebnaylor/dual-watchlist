@@ -16,11 +16,16 @@ class User < ApplicationRecord
   before_validation :create_personal_watchlist, on: :create
 
   validate :acceptable_image
+  validates :first_name, :last_name, presence: true
 
   def full_name
     return email if first_name.blank? && last_name.blank?
 
     "#{first_name.strip} #{last_name.strip}"
+  end
+
+  def initials
+    first_name[0].upcase + last_name[0].upcase
   end
 
   def acceptable_image
