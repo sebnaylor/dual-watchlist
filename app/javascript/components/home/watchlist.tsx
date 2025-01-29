@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { watchlistTypes } from "./types";
 
 export interface WatchlistProps {
@@ -10,13 +10,27 @@ const Watchlist: React.FC<WatchlistProps> = ({ watchlistItems }) => {
     .concat(watchlistItems["movies"])
     .some((item) => item.watched);
 
+  const styles = {
+    hideScrollbar: {
+      overflowX: "scroll",
+      scrollbarWidth: "none",
+      msOverflowStyle: "none",
+    },
+    hideScrollbarWebkit: {
+      display: "none",
+    },
+  };
+
   return (
-    <div className="px-2">
+    <div>
       <div className="flex justify-between items-center">
         <h2 className="text-white text-2xl font-semibold">Watchlist</h2>
       </div>
       <h3 className="text-white text-lg font-medium">Movies</h3>
-      <div className="flex flex-no-wrap gap-x-2 py-2 overflow-x-scroll scrolling-touch items-start">
+      <div
+        className="flex flex-no-wrap gap-x-2 py-2 scrolling-touch items-start"
+        style={styles.hideScrollbar as React.CSSProperties}
+      >
         {watchlistItems["movies"].map(
           (item) =>
             !item.watched && (
@@ -34,7 +48,10 @@ const Watchlist: React.FC<WatchlistProps> = ({ watchlistItems }) => {
         )}
       </div>
       <h3 className="text-white text-lg font-medium">TV</h3>
-      <div className="flex flex-no-wrap gap-x-2 py-2 overflow-x-scroll scrolling-touch items-start">
+      <div
+        className="flex flex-no-wrap gap-x-2 py-2 scrolling-touch items-start"
+        style={styles.hideScrollbar as React.CSSProperties}
+      >
         {watchlistItems["tv"].map(
           (item) =>
             !item.watched && (
@@ -55,7 +72,10 @@ const Watchlist: React.FC<WatchlistProps> = ({ watchlistItems }) => {
       {hasWatchedanItem && (
         <>
           <h3 className="text-white text-lg font-medium">Recently Watched</h3>
-          <div className="flex flex-no-wrap gap-x-2 py-2 overflow-x-scroll scrolling-touch items-start">
+          <div
+            className="flex flex-no-wrap gap-x-2 py-2 scrolling-touch items-start"
+            style={styles.hideScrollbar as React.CSSProperties}
+          >
             {watchlistItems["tv"].concat(watchlistItems["movies"]).map(
               (item) =>
                 item.watched && (
