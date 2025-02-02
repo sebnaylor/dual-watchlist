@@ -32,7 +32,7 @@ class HomeIndexPresenter < BasePresenter
   attr_reader :current_user, :watchlist_params
 
   def movie
-    @movie ||= Tmdb::Movie.detail(watchlisted_items.movie.presence&.sample&.tmdb_id || Tmdb::Movie.popular.sample.id)
+    @movie ||= Tmdb::Movie.detail(watchlisted_items.movie.presence&.sample&.media&.tmdb_id || Tmdb::Movie.popular.sample.id)
   end
 
   def watchlisted_items
