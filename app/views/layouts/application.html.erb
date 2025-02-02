@@ -17,6 +17,7 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     <%= javascript_pack_tag "application" %>
+    <%= Sentry.get_trace_propagation_meta.html_safe %>
   </head>
 
   <body class='bg-backgroundBlack text-white font-sans font-light pb-20'>
