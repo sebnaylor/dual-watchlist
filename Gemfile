@@ -42,6 +42,8 @@ gem "tailwindcss-rails"
 gem 'image_processing', '~> 1.12'
 gem "aws-sdk-s3", require: false
 gem 'httparty'
+gem 'motor-admin'
+gem "rack-timeout", require: "rack/timeout/base"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
