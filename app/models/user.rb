@@ -2,7 +2,7 @@
 
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
-          :recoverable, :rememberable, :validatable
+          :recoverable, :rememberable, :validatable, :masqueradable
   has_one_attached :image do |attachable|
     attachable.variant :thumb, resize_to_fill: [400, 400]
   end
@@ -17,6 +17,11 @@ class User < ApplicationRecord
 
   validate :acceptable_image
   validates :first_name, :last_name, presence: true
+
+  enum role: {
+    default: 'default',
+    admin: 'admin'
+  }
 
   def full_name
     return email if first_name.blank? && last_name.blank?
