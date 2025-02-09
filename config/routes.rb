@@ -21,6 +21,10 @@ Rails.application.routes.draw do
     collection { get 'query' }
   end
 
+  namespace :admin do
+    resources :users, only: %i[index show]
+  end
+
   get 'analytics', to: 'analytics#show', as: :analytics
   post 'analytics/create_shared_watchlist', to: 'analytics#create_shared_watchlist'
 

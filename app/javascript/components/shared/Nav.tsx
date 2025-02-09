@@ -5,13 +5,20 @@ import { SearchIcon } from "./icons";
 export interface NavProps {
   searchPagePath: string;
   display: string;
+  userIsAdmin: string;
+  userIsMasquerading: boolean;
 }
 
-const Nav: React.FC<NavProps> = ({ searchPagePath, display }) => {
+const Nav: React.FC<NavProps> = ({
+  searchPagePath,
+  display,
+  userIsAdmin,
+  userIsMasquerading,
+}) => {
   var styles = {
     bmBurgerButton: {
       position: "absolute",
-      top: "9px",
+      top: userIsMasquerading ? "65px" : "9px",
       right: "4px",
       width: "36px",
       height: "30px",
@@ -111,6 +118,7 @@ const Nav: React.FC<NavProps> = ({ searchPagePath, display }) => {
       >
         <a href="/users/edit">Account</a>
         <a href="/analytics">Watchlist Connect</a>
+        {userIsAdmin && <a href="/admin/users">Admin</a>}
         <span onClick={logout}>Logout</span>
       </Menu>
     </>
