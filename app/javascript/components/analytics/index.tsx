@@ -50,7 +50,8 @@ const Analytics: React.FC<AnalyticsProps> = ({
     setJoinCode(e.target.value);
   };
 
-  const noOneHasWatchedAnything =
+  const noOneHasWatchedAnything = () =>
+    Object.keys(analytics).length > 0 &&
     analytics.chartData.watchedMovieRuntimeChart.data[0].value == 0 &&
     analytics.chartData.watchedMovieRuntimeChart.data[1].value == 0;
 
@@ -127,7 +128,7 @@ const Analytics: React.FC<AnalyticsProps> = ({
   );
 
   const watchlistAnalytics = () => {
-    if (noOneHasWatchedAnything) {
+    if (noOneHasWatchedAnything()) {
       return (
         <div className="px-2">
           Mark a watchlisted movie as watched to see some analytics
@@ -135,61 +136,66 @@ const Analytics: React.FC<AnalyticsProps> = ({
       );
     }
 
-    return (
-      <div className="flex flex-col gap-y-2 px-2">
-        <h2 className="text-white text-2xl text-center font-extralight">
-          {analytics.chartData.watchedMovieRuntimeChart.title}
-        </h2>
-        <div className="h-32">
-          <PieChart
-            colors={["blue", "red"]}
-            series={[
-              {
-                data: analytics.chartData.watchedMovieRuntimeChart.data.map(
-                  (item, index) => ({
-                    id: index,
-                    value: item.value,
-                    label: item.label,
-                  })
-                ),
-              },
-            ]}
-            slotProps={{
-              legend: {
-                labelStyle: {
-                  fontSize: 10,
-                  fill: "white",
+    if (Object.keys(analytics).length > 0) {
+      return (
+        <div className="flex flex-col gap-y-2 px-2">
+          <h2 className="text-white text-2xl text-center font-extralight">
+            {analytics.chartData.watchedMovieRuntimeChart.title}
+          </h2>
+          <div className="h-32">
+            <PieChart
+              colors={["blue", "red"]}
+              series={[
+                {
+                  data: analytics.chartData.watchedMovieRuntimeChart.data.map(
+                    (item, index) => ({
+                      id: index,
+                      value: item.value,
+                      label: item.label,
+                    })
+                  ),
                 },
-                direction: "column",
-                position: { vertical: "middle", horizontal: "right" },
-                padding: 0,
-              },
-            }}
-          />
-        </div>
-        <div className="flex items-center font-thin text-md">
-          {analytics.chartData.watchedMovieRuntimeChart.conclusion.title}
-        </div>
+              ]}
+              slotProps={{
+                legend: {
+                  labelStyle: {
+                    fontSize: 10,
+                    fill: "white",
+                  },
+                  direction: "column",
+                  position: { vertical: "middle", horizontal: "right" },
+                  padding: 0,
+                },
+              }}
+            />
+          </div>
+          <div className="flex items-center font-thin text-md">
+            {analytics.chartData.watchedMovieRuntimeChart.conclusion.title}
+          </div>
 
-        {analytics.chartData.watchedMovieRuntimeChart.conclusion
-          .runtimeDifference != 0 && (
-          <>
-            <div className="mx-auto">
-              <img
-                src={
+          {analytics.chartData.watchedMovieRuntimeChart.conclusion
+            .runtimeDifference != 0 && (
+            <>
+              <div className="mx-auto">
+                <img
+                  src={
+                    analytics.chartData.watchedMovieRuntimeChart.conclusion
+                      .nextUserToWatchImage
+                  }
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+              </div>
+              <div className="flex items-center font-thin text-md">
+                {
                   analytics.chartData.watchedMovieRuntimeChart.conclusion
-                    .nextUserToWatchImage
+                    .subtitle
                 }
-                className="w-10 h-10 rounded-full object-cover"
-              />
-            </div>
-            <div className="flex items-center font-thin text-md">
-              {analytics.chartData.watchedMovieRuntimeChart.conclusion.subtitle}
-            </div>
-          </>
-        )}
-      </div>
-    );
+              </div>
+            </>
+          )}
+        </div>
+      );
+    }
   };
 
   return hasWatchlistPartner ? watchlistAnalytics() : noWatchlistPartnerState();
