@@ -360,7 +360,27 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
     );
   };
 
-  return <div>{errors ? <div>{errors}</div> : renderMedia(media)}</div>;
+  const renderErrors = (errors: string | null) => {
+    if (!errors) return null;
+
+    return (
+      <div className="flex flex-col items-center justify-center h-full">
+        <img
+          src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExaXQ5eXh4ZnJjaDhteGdja3czaDh0eG5mazU4aW9tOWloZjNjeGc1dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3owzWj2ViX6FJj5xMQ/giphy.gif"
+          alt="Error illustration"
+          className="w-[500px] object-cover"
+        />
+        <Text text="Oops! Something went wrong" type="h1" />
+        <Text text={errors} type="p" />
+      </div>
+    );
+  };
+
+  return (
+    <div className="flex flex-col gap-y-2">
+      {!!errors ? renderErrors(errors) : renderMedia(media)}
+    </div>
+  );
 };
 
 export default MediaShow;

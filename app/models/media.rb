@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Media < ApplicationRecord
-  validates :tmdb_id, presence: true, uniqueness: true
   validates :adult, inclusion: { in: [true, false] }
   validates :origin_country, presence: true
   validates :original_language, presence: true

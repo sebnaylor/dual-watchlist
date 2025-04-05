@@ -4,9 +4,8 @@ class MediaController < ApplicationController
   def show
     save_media(media, media_type_params) unless existing_media || fetch_media.key?('status_code')
     @props = MediaShowPresenter.new(media, media_type_params, nil, current_user).camelize
-    # rescue StandardError
-    #   @props = MediaShowPresenter.new(nil, media_type_params, 'Media not found', current_user).camelize
-    # use the API to render a struct of the media
+  rescue StandardError => e
+    @props = MediaShowPresenter.new(media, media_type_params, e.message, current_user).camelize
   end
 
   private
