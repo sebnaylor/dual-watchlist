@@ -5,6 +5,7 @@ class AnalyticsController < ApplicationController
 
   def show
     @props = AnalyticsPresenter.new(current_user).camelize
+    render inertia: 'analytics/show', props: @props
   end
 
   def create_shared_watchlist

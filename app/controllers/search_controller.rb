@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 class SearchController < ApplicationController
-  def index; end
+  def index
+    render inertia: 'search/index'
+  end
 
   def query
     results = Tmdb::Search.new.resource('multi').query(search_params[:query]).fetch.first(9)

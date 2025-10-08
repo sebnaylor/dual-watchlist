@@ -87,3 +87,7 @@ gem "devise", "~> 4.9"
 gem "shakapacker", "= 8.0"
 
 gem "react-rails", "= 3.2"
+
+gem "inertia_rails", "~> 3.11"
+
+gem "vite_rails", "~> 3.0"
