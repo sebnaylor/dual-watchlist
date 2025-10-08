@@ -1,5 +1,5 @@
 import React from "react";
-import { watchlistTypes } from "./types";
+import { watchlistTypes } from "../../pages/home/types";
 
 export interface WatchlistProps {
   watchlistItems: watchlistTypes;

@@ -1,37 +1,25 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Dual Watchlist" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="mobile-web-app-capable" content="yes">
-    <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= yield :head %>
+    <%= inertia_ssr_head %>
 
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/icon.png" type="image/png">
-    <%= favicon_link_tag asset_path('favicon.png') %>
-    <link rel="apple-touch-icon" href="/icon.png">
-    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
-    <%= javascript_pack_tag "application" %>
-    <%= Sentry.get_trace_propagation_meta.html_safe %>
+    <%# If you want to use React add `vite_react_refresh_tag` %>
+    <%= vite_react_refresh_tag %>
+    <%= vite_client_tag %>
+    <%= vite_stylesheet_tag 'application' %>
+    <%= vite_typescript_tag 'inertia' %>
   </head>
 
-  <body class='bg-backgroundBlack text-white font-sans font-light pb-20'>
+  <body class='bg-backgroundBlack text-white font-sans font-light pb-20' style="background-color: #1F1E20">
     <% if user_masquerade? %>
       <div class="bg-yellow-600 text-white text-center p-2 flex items-center justify-between">
         You are masquerading as <%= current_user.full_name %>
         <%= link_to "Stop Masquerading", back_masquerade_path(current_user), class: "text-white underline primary-button" %>
       </div>
     <% end %>
-    <span>
-      <%= react_component("shared/Nav", NavPresenter.new(request, current_user, user_masquerade?).camelize ) %>
-    </span>
-    <p class="px-2 notice"><%= notice %></p>
-    <p class="px-2 alert"><%= alert %></p>
     <%= yield %>
   </body>
 </html>

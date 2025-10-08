@@ -4,8 +4,10 @@ class MediaController < ApplicationController
   def show
     save_media(media, media_type_params) unless existing_media || fetch_media.key?('status_code')
     @props = MediaShowPresenter.new(media, media_type_params, nil, current_user).camelize
+    render inertia: 'media/show', props: @props
   rescue StandardError => e
     @props = MediaShowPresenter.new(media, media_type_params, e.message, current_user).camelize
+    render inertia: 'media/show', props: @props
   end
 
   private

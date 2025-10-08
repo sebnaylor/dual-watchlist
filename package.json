@@ -20,10 +20,15 @@
     "@babel/runtime": "^7.26.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@inertiajs/react": "^2.1.6",
     "@mui/material": "^6.4.1",
     "@mui/x-charts": "^7.24.1",
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/typography": "^0.5.16",
+    "@tailwindcss/vite": "^4.1.13",
     "@types/babel__core": "^7.20.5",
     "@types/webpack": "^5.28.5",
+    "@vitejs/plugin-react": "^5.0.3",
     "axios": "^1.7.9",
     "babel-loader": "^8.4.1",
     "classnames": "^2.5.1",
@@ -32,9 +37,9 @@
     "css-minimizer-webpack-plugin": "^7.0.0",
     "mini-css-extract-plugin": "^2.9.2",
     "prop-types": "^15.8.1",
-    "react": "^18.3.1",
+    "react": "^19.1.1",
     "react-burger-menu": "^3.1.0",
-    "react-dom": "^18.3.1",
+    "react-dom": "^19.1.1",
     "react-shimmer": "^3.2.0",
     "react-tooltip": "^5.28.0",
     "react_ujs": "^3.2.1",
@@ -53,6 +58,11 @@
     "@types/react": "^18.3.12",
     "@types/react-burger-menu": "^2.8.7",
     "@types/react-dom": "^18.3.1",
+    "vite": "^5.4.20",
+    "vite-plugin-ruby": "^5.1.1",
     "webpack-dev-server": "^4.15.2"
+  },
+  "scripts": {
+    "check": "tsc -p tsconfig.app.json && tsc -p tsconfig.node.json"
   }
 }
