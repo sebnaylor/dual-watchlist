@@ -368,7 +368,7 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
         <img
           src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExaXQ5eXh4ZnJjaDhteGdja3czaDh0eG5mazU4aW9tOWloZjNjeGc1dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3owzWj2ViX6FJj5xMQ/giphy.gif"
           alt="Error illustration"
-          className="w-[500px] object-cover"
+          className="w-media-poster object-cover"
         />
         <Text text="Oops! Something went wrong" type="h1" />
         <Text text={errors} type="p" />
