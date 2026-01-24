@@ -3,32 +3,39 @@ import Button from "../shared/Button";
 import { api } from "../../lib/api-client";
 import { Image, Shimmer } from "react-shimmer";
 
-export interface SearchProps {}
-
 export interface MediaProps {
   posterPath: string;
   tmdbId: number;
   mediaType: string;
 }
-[];
 
 export interface SearchResponseProps {
   media: MediaProps[];
 }
 
-const Search: React.FC<SearchProps> = () => {
+const Search: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [mediaResponse, setMediaResponse] = useState<SearchResponseProps>({
     media: [],
   });
 
   async function search(searchTerm: string) {
-    try {
-      const response = await api.search.query(searchTerm);
-      setMediaResponse(response.data);
-    } catch (error) {
-      console.error(error);
-    }
+    await axios
+      .get("/search/query.json", {
+        params: {
+          query: {
+            query: searchTerm,
+          },
+        },
+      })
+      .then((response) => {
+        setMediaResponse(response.data);
+
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   return (
@@ -38,13 +45,13 @@ const Search: React.FC<SearchProps> = () => {
           mediaResponse.media.map((media, index) => {
             return (
               <div
+                key={media.tmdbId}
                 onClick={() => {
                   window.location.href = `/media/${media.tmdbId}?media_type=${media.mediaType}`;
                 }}
                 className="cursor-pointer"
               >
-                <Image // TODO: This is working fine - should investigate why type is complaining
-                  key={index}
+                <Image
                   src={
                     media.posterPath ??
                     "https://dual-watchlist.s3.eu-north-1.amazonaws.com/poster-not-found.png"

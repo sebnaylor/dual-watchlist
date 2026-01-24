@@ -1,6 +1,7 @@
 import React from "react";
 import { slide as Menu } from "react-burger-menu";
 import { SearchIcon } from "./icons";
+import { api } from "../../lib/api-client";
 
 export interface NavProps {
   searchPagePath: string;
@@ -15,7 +16,7 @@ const Nav: React.FC<NavProps> = ({
   userIsAdmin,
   userIsMasquerading,
 }) => {
-  var styles = {
+  const styles = {
     bmBurgerButton: {
       position: "absolute",
       top: userIsMasquerading ? "65px" : "9px",
@@ -35,7 +36,6 @@ const Nav: React.FC<NavProps> = ({
     },
     bmMenu: {
       background: "#373a47",
-      // padding: "2.5em 1.5em 0",
       fontSize: "1.15em",
     },
     bmCross: {
@@ -59,23 +59,12 @@ const Nav: React.FC<NavProps> = ({
   };
 
   async function logout() {
-    await fetch("/users/sign_out", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-Token":
-          document
-            .querySelector('meta[name="csrf-token"]')
-            ?.getAttribute("content") || "",
-      },
-    })
-      .then((response) => {
-        console.log(response);
-        window.location.href = "/";
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    try {
+      await api.auth.signOut();
+      window.location.href = "/";
+    } catch (error) {
+      window.location.href = "/";
+    }
   }
 
   return (

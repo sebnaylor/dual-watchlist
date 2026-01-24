@@ -8,6 +8,10 @@
         "TASK_MASTER_TOOLS": "core",
         "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}"
       }
+    },
+    "puppeteer": {
+      "command": "npx",
+      "args": ["-y", "puppeteer-mcp-server"]
     }
   }
 }
