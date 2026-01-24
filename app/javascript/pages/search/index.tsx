@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button from "../../components/shared/Button";
-import axios from "axios";
+import { api } from "../../lib/api-client";
 import { Image, Shimmer } from "react-shimmer";
 
 export interface SearchProps {}
@@ -23,22 +23,12 @@ const Search: React.FC<SearchProps> = () => {
   });
 
   async function search(searchTerm: string) {
-    await axios
-      .get("/search/query.json", {
-        params: {
-          query: {
-            query: searchTerm,
-          },
-        },
-      })
-      .then((response) => {
-        setMediaResponse(response.data);
-
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    try {
+      const response = await api.search.query(searchTerm);
+      setMediaResponse(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (

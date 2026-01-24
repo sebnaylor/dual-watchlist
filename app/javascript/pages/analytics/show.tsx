@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "../../components/shared/Button";
-import axios, { Axios } from "axios";
+import { api } from "../../lib/api-client";
 import Text from "../../components/shared/Text";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { CopyIcon, MergeIcon } from "../../components/shared/icons";
@@ -56,28 +56,11 @@ const Analytics: React.FC<AnalyticsProps> = ({
     analytics.chartData.watchedMovieRuntimeChart.data[1].value == 0;
 
   async function postRequest() {
-    await axios
-      .post(
-        "/analytics/create_shared_watchlist.json",
-        {
-          join_code: joinCode,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-Token":
-              document
-                .querySelector('meta[name="csrf-token"]')
-                ?.getAttribute("content") || "",
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    try {
+      await api.analytics.createSharedWatchlist(joinCode);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const noWatchlistPartnerState = () => (

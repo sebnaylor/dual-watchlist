@@ -11,7 +11,7 @@ import {
 } from "../../components/shared/icons";
 import Ratings from "../../components/shared/Ratings";
 import Backdrop from "../../components/media/backdrop";
-import axios from "axios";
+import { api } from "../../lib/api-client";
 import classNames from "classnames";
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
@@ -100,91 +100,42 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
   );
 
   async function addToList(media: MediaShowProps["media"]) {
-    await axios
-      .post(
-        `/watchlist_media_items.json`,
-        {
-          media_tmdb_id: media.tmdbId,
-          media_type: media.type,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-Token":
-              document
-                .querySelector('meta[name="csrf-token"]')
-                ?.getAttribute("content") || "",
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response);
-        setPressedListButton(!pressedListButton);
-        window.location.reload();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    try {
+      await api.watchlist.add(media.tmdbId, media.type);
+      setPressedListButton(!pressedListButton);
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async function removeFromList(
     mediaWatchlistItem: MediaShowProps["media"]["watchlistStatus"]["personalWatchlistMediaItem"]
   ) {
-    const csrfToken = document
-      .querySelector('meta[name="csrf-token"]')
-      ?.getAttribute("content");
-
     if (isWatched) {
       setAfterInitialLoadErrors(
         "Cannot remove a watched item from the watchlist"
       );
       return;
     }
-    await axios
-      .delete(`/watchlist_media_items/${mediaWatchlistItem.id}.json`, {
-        headers: {
-          "X-CSRF-Token": csrfToken,
-        },
-        data: {
-          media_type: media.type,
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        setPressedListButton(!pressedListButton);
-        window.location.reload();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    try {
+      await api.watchlist.remove(mediaWatchlistItem.id, media.type);
+      setPressedListButton(!pressedListButton);
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async function markAsWatchedOrUnWatched(
     mediaWatchlistItem: MediaShowProps["media"]["watchlistStatus"]["personalWatchlistMediaItem"]
   ) {
-    await axios
-      .patch(
-        `/watchlist_media_items/${mediaWatchlistItem.id}.json`,
-        {
-          watched: !isWatched,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-Token":
-              document
-                .querySelector('meta[name="csrf-token"]')
-                ?.getAttribute("content") || "",
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response);
-        window.location.reload();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    try {
+      await api.watchlist.markWatched(mediaWatchlistItem.id, !isWatched);
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const isWatched =
