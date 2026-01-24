@@ -1,4 +1,5 @@
 import React from "react";
+import { router } from "@inertiajs/react";
 import Button from "../shared/Button";
 import { api } from "../../lib/api-client";
 import Text from "../shared/Text";
@@ -41,8 +42,6 @@ const Analytics: React.FC<AnalyticsProps> = ({
   hasWatchlistPartner,
   analytics,
 }) => {
-  console.log(analytics);
-
   const [joinCode, setJoinCode] = React.useState<string>("");
   const [copyPressed, setCopyPressed] = React.useState<boolean>(false);
 
@@ -58,8 +57,9 @@ const Analytics: React.FC<AnalyticsProps> = ({
   async function postRequest() {
     try {
       await api.analytics.createSharedWatchlist(joinCode);
+      router.reload();
     } catch (error) {
-      console.error(error);
+      // Error handling is done by the API client interceptor
     }
   }
 

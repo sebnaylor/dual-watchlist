@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { router } from "@inertiajs/react";
 import { ratingsType } from "../home/types";
 import Button from "../shared/Button";
 import {
@@ -84,7 +85,6 @@ export interface MediaShowProps {
 }
 
 const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
-  console.log(media, errors);
   const [pressedListButton, setPressedListButton] = useState(
     media.watchlistStatus.inSharedWatchlist
   );
@@ -103,9 +103,9 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
     try {
       await api.watchlist.add(media.tmdbId, media.type);
       setPressedListButton(!pressedListButton);
-      window.location.reload();
+      router.reload({ only: ["media"] });
     } catch (error) {
-      console.error(error);
+      setAfterInitialLoadErrors("Failed to add to watchlist");
     }
   }
 
@@ -121,9 +121,9 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
     try {
       await api.watchlist.remove(mediaWatchlistItem.id, media.type);
       setPressedListButton(!pressedListButton);
-      window.location.reload();
+      router.reload({ only: ["media"] });
     } catch (error) {
-      console.error(error);
+      setAfterInitialLoadErrors("Failed to remove from watchlist");
     }
   }
 
@@ -132,9 +132,9 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
   ) {
     try {
       await api.watchlist.markWatched(mediaWatchlistItem.id, !isWatched);
-      window.location.reload();
+      router.reload({ only: ["media"] });
     } catch (error) {
-      console.error(error);
+      setAfterInitialLoadErrors("Failed to update watched status");
     }
   }
 

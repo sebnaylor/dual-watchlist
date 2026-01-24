@@ -73,7 +73,7 @@ class MediaShowPresenter < BasePresenter
       user_image: current_user.profile_image,
       user_initials: current_user.initials,
       watchlist_partner_image: current_user.watchlist_partner&.profile_image,
-      waatchlist_partner_initials: current_user.watchlist_partner&.initials
+      watchlist_partner_initials: current_user.watchlist_partner&.initials
     }
   end
 

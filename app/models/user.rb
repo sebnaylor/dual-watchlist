@@ -2,7 +2,9 @@
 
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
-          :recoverable, :rememberable, :validatable, :masqueradable
+          :recoverable, :rememberable, :validatable, :masqueradable,
+          :omniauthable, omniauth_providers: [:google_oauth2]
+
   has_one_attached :image do |attachable|
     attachable.variant :thumb, resize_to_fill: [400, 400]
   end
@@ -16,12 +18,35 @@ class User < ApplicationRecord
   before_validation :create_personal_watchlist, on: :create
 
   validate :acceptable_image
-  validates :first_name, :last_name, presence: true
+  validates :first_name, :last_name, presence: true, unless: :from_omniauth?
 
   enum role: {
     default: 'default',
     admin: 'admin'
   }
+
+  def self.from_omniauth(auth)
+    # First try to find by provider/uid
+    user = find_by(provider: auth.provider, uid: auth.uid)
+    return user if user
+
+    # Then try to find by email and link the OAuth account
+    user = find_by(email: auth.info.email)
+    if user
+      user.update(provider: auth.provider, uid: auth.uid)
+      return user
+    end
+
+    # Otherwise create a new user
+    create(
+      provider: auth.provider,
+      uid: auth.uid,
+      email: auth.info.email,
+      password: Devise.friendly_token[0, 20],
+      first_name: auth.info.first_name || auth.info.name&.split&.first || 'User',
+      last_name: auth.info.last_name || auth.info.name&.split&.last || ''
+    )
+  end
 
   def full_name
     return email if first_name.blank? && last_name.blank?
@@ -60,6 +85,10 @@ class User < ApplicationRecord
 
   private
 
+  def from_omniauth?
+    provider.present? && uid.present?
+  end
+
   def generate_join_code
     self.join_code = SecureRandom.uuid
   end
@@ -68,7 +97,7 @@ class User < ApplicationRecord
     build_personal_watchlist
   end
 
-  def watched?(media) # not sure this lives here
+  def watched?(media)
     watchlist_media_items.find_by(media_id: media.id).watched
   end
 end

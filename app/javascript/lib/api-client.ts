@@ -32,28 +32,27 @@ export const api = {
         media_tmdb_id: tmdbId,
         media_type: mediaType,
       }),
-
     remove: (id: number, mediaType: string) =>
       apiClient.delete(`/watchlist_media_items/${id}.json`, {
         data: { media_type: mediaType },
       }),
-
     markWatched: (id: number, watched: boolean) =>
       apiClient.patch(`/watchlist_media_items/${id}.json`, { watched }),
   },
-
   search: {
     query: (searchTerm: string) =>
       apiClient.get("/search/query.json", {
         params: { query: { query: searchTerm } },
       }),
   },
-
   analytics: {
     createSharedWatchlist: (joinCode: string) =>
       apiClient.post("/analytics/create_shared_watchlist.json", {
         join_code: joinCode,
       }),
+  },
+  auth: {
+    signOut: () => apiClient.get("/users/sign_out"),
   },
 };
 
