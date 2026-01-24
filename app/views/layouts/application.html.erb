@@ -13,7 +13,7 @@
     <%= vite_typescript_tag 'inertia' %>
   </head>
 
-  <body class='bg-backgroundBlack text-white font-sans font-light pb-20' style="background-color: #1F1E20">
+  <body class='bg-brand-dark text-white font-sans font-light pb-20'>
     <% if user_masquerade? %>
       <div class="bg-yellow-600 text-white text-center p-2 flex items-center justify-between">
         You are masquerading as <%= current_user.full_name %>

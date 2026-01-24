@@ -1,0 +1,141 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": "11",
+        "title": "Set up Tailwind design tokens and configuration",
+        "description": "Create a comprehensive design system in tailwind.config.js with tokens for colors, spacing, and semantic sizing to replace hardcoded values",
+        "details": "Update tailwind.config.js to include:\n\n```javascript\nmodule.exports = {\n  theme: {\n    extend: {\n      colors: {\n        'brand': {\n          'dark': '#1F1E20',\n          'purple': '#2c2638',\n          'accent': '#f05542',\n          'primary': 'rgb(55 48 163)'\n        }\n      },\n      spacing: {\n        'media-card': '500px',\n        'media-thumb': '200px'\n      },\n      height: {\n        'media-card': '500px'\n      },\n      width: {\n        'media-card': '200px'\n      }\n    }\n  }\n}\n```\n\nCreate utility classes in app/assets/stylesheets/application.css:\n```css\n@layer utilities {\n  .scrollbar-hide {\n    -ms-overflow-style: none;\n    scrollbar-width: none;\n  }\n  .scrollbar-hide::-webkit-scrollbar {\n    display: none;\n  }\n  .gradient-overlay {\n    @apply bg-gradient-to-t from-black/80 to-transparent;\n  }\n}\n```",
+        "testStrategy": "1. Verify all color values are replaced with design tokens\n2. Check that arbitrary Tailwind values are replaced with semantic names\n3. Test utility classes work across browsers\n4. Ensure no visual regressions by comparing screenshots before/after",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": [],
+        "updatedAt": "2026-01-24T10:01:46.297Z"
+      },
+      {
+        "id": "12",
+        "title": "Implement Lucide React icons and replace custom SVGs",
+        "description": "Install Lucide React library and systematically replace all hardcoded SVG icons with Lucide components that accept color and size props",
+        "details": "Install Lucide React:\n```bash\nnpm install lucide-react\n```\n\nReplace icons in app/javascript/components/shared/icons.tsx:\n```typescript\nimport { Home, Search, User, X, Menu, ChevronLeft, ChevronRight, Star, Plus, Check } from 'lucide-react';\n\nexport const Icons = {\n  Home: (props) => <Home {...props} />,\n  Search: (props) => <Search {...props} />,\n  User: (props) => <User {...props} />,\n  Close: (props) => <X {...props} />,\n  Menu: (props) => <Menu {...props} />,\n  // ... map all existing icons\n};\n```\n\nUpdate all icon usage to pass color/size props:\n```typescript\n<Icons.Home color=\"white\" size={24} />\n```",
+        "testStrategy": "1. Verify all custom SVG icons are replaced with Lucide equivalents\n2. Test that icons accept and respond to color/size props\n3. Check icon rendering performance with React DevTools\n4. Ensure icons are tree-shaken in production build",
+        "priority": "high",
+        "dependencies": [
+          "11"
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": "13",
+        "title": "Create centralized Axios client with TypeScript types",
+        "description": "Build a centralized API client to eliminate duplicated axios calls and CSRF token setup across components",
+        "details": "Create app/javascript/lib/api-client.ts:\n```typescript\nimport axios from 'axios';\n\nconst apiClient = axios.create({\n  headers: {\n    'X-CSRF-Token': document.querySelector('meta[name=\"csrf-token\"]')?.getAttribute('content') || ''\n  }\n});\n\n// Response interceptor for error handling\napiClient.interceptors.response.use(\n  response => response,\n  error => {\n    console.error('API Error:', error);\n    // Handle common errors (401, 403, 500)\n    if (error.response?.status === 401) {\n      window.location.href = '/users/sign_in';\n    }\n    return Promise.reject(error);\n  }\n);\n\nexport const api = {\n  watchlist: {\n    add: (mediaId: number, mediaType: string) => \n      apiClient.post('/watchlist/add', { media_id: mediaId, media_type: mediaType }),\n    remove: (id: number) => \n      apiClient.delete(`/watchlist/${id}`),\n    markWatched: (id: number) => \n      apiClient.patch(`/watchlist/${id}/watched`)\n  },\n  auth: {\n    signOut: () => apiClient.delete('/users/sign_out')\n  }\n};\n```",
+        "testStrategy": "1. Test CSRF token is automatically included in all requests\n2. Verify error interceptor handles 401/403/500 responses\n3. Check that all existing axios calls are replaced\n4. Test TypeScript autocompletion for API methods",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": "14",
+        "title": "Convert Devise views to React/Inertia components",
+        "description": "Replace static ERB views for login, signup, and password reset with React components using Inertia.js for consistent UX",
+        "details": "Create React components for auth pages:\n\n1. app/javascript/pages/Auth/Login.tsx:\n```typescript\nimport { useForm } from '@inertiajs/react';\n\nexport default function Login() {\n  const { data, setData, post, errors } = useForm({\n    email: '',\n    password: '',\n    remember_me: false\n  });\n\n  const submit = (e) => {\n    e.preventDefault();\n    post('/users/sign_in');\n  };\n\n  return (\n    <div className=\"min-h-screen bg-brand-dark flex items-center justify-center\">\n      {/* Form with Tailwind styling */}\n    </div>\n  );\n}\n```\n\n2. Update Devise controllers to render Inertia:\n```ruby\nclass Users::SessionsController < Devise::SessionsController\n  def new\n    render inertia: 'Auth/Login'\n  end\nend\n```\n\n3. Configure routes:\n```ruby\ndevise_for :users, controllers: {\n  sessions: 'users/sessions',\n  registrations: 'users/registrations',\n  passwords: 'users/passwords'\n}\n```",
+        "testStrategy": "1. Test all auth flows work with new React components\n2. Verify form validation displays inline errors\n3. Check mobile responsiveness\n4. Ensure CSRF protection still works\n5. Test password reset flow maintains dark theme",
+        "priority": "high",
+        "dependencies": [
+          "11",
+          "12"
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": "15",
+        "title": "Extract reusable React components",
+        "description": "Create reusable MediaSection and MediaCard components to eliminate duplicated JSX in Watchlist and search results",
+        "details": "Create reusable components:\n\n1. app/javascript/components/MediaSection.tsx:\n```typescript\ninterface MediaSectionProps {\n  title: string;\n  items: MediaItem[];\n  onRemove: (id: number) => void;\n  onToggleWatched: (id: number) => void;\n}\n\nexport function MediaSection({ title, items, onRemove, onToggleWatched }: MediaSectionProps) {\n  return (\n    <div className=\"mb-8\">\n      <h2 className=\"text-2xl font-bold mb-4\">{title}</h2>\n      <div className=\"grid grid-cols-2 md:grid-cols-4 gap-4\">\n        {items.map(item => (\n          <MediaCard \n            key={item.id}\n            item={item}\n            onRemove={onRemove}\n            onToggleWatched={onToggleWatched}\n          />\n        ))}\n      </div>\n    </div>\n  );\n}\n```\n\n2. Replace duplicated sections in Watchlist.tsx:\n```typescript\n<MediaSection \n  title=\"Movies\" \n  items={movies} \n  onRemove={handleRemove}\n  onToggleWatched={handleToggleWatched}\n/>\n<MediaSection \n  title=\"TV Shows\" \n  items={tvShows} \n  onRemove={handleRemove}\n  onToggleWatched={handleToggleWatched}\n/>\n```",
+        "testStrategy": "1. Verify MediaSection renders correctly for movies and TV shows\n2. Test callbacks work properly (remove, toggle watched)\n3. Check component reusability in different contexts\n4. Ensure no visual regressions",
+        "priority": "medium",
+        "dependencies": [
+          "13"
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": "16",
+        "title": "Create shared TypeScript types and constants",
+        "description": "Extract TypeScript interfaces into organized type files and create constants for magic strings",
+        "details": "Create type definitions:\n\n1. app/javascript/types/media.ts:\n```typescript\nexport enum MediaType {\n  MOVIE = 'Movie',\n  TV = 'Tv'\n}\n\nexport interface MediaItem {\n  id: number;\n  tmdb_id: number;\n  title: string;\n  poster_path: string;\n  media_type: MediaType;\n  watched: boolean;\n}\n\nexport interface WatchlistItem extends MediaItem {\n  watchlist_id: number;\n}\n```\n\n2. app/javascript/types/user.ts:\n```typescript\nexport interface User {\n  id: number;\n  email: string;\n  name: string;\n  profile_image_url?: string;\n}\n```\n\n3. app/javascript/constants/index.ts:\n```typescript\nexport const API_ENDPOINTS = {\n  WATCHLIST_ADD: '/watchlist/add',\n  WATCHLIST_REMOVE: '/watchlist/:id',\n  SIGN_OUT: '/users/sign_out'\n} as const;\n\nexport const TMDB_BASE_URL = 'https://image.tmdb.org/t/p/w500';\n```",
+        "testStrategy": "1. Verify all components import and use shared types\n2. Check TypeScript compilation with no errors\n3. Test that constants are used consistently\n4. Ensure no hardcoded strings remain",
+        "priority": "medium",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": "17",
+        "title": "Fix Rails code issues and extract shared logic",
+        "description": "Fix typos, remove dead code, and extract duplicated presenter logic into concerns",
+        "details": "1. Fix typo in MediaShowPresenter:\n```ruby\n# Line 76: waatchlist_partner_initials -> watchlist_partner_initials\n```\n\n2. Remove dead AddToWatchlist service or implement it\n\n3. Create concern for media mapping:\n```ruby\n# app/controllers/concerns/media_mappable.rb\nmodule MediaMappable\n  extend ActiveSupport::Concern\n\n  private\n\n  def map_media_items(items)\n    items.map do |item|\n      {\n        id: item.id,\n        tmdb_id: item.tmdb_id,\n        title: item.title,\n        poster_path: poster_url(item),\n        media_type: item.media_type,\n        watched: item.watched\n      }\n    end\n  end\n\n  def poster_url(item)\n    return nil unless item.poster_path\n    \"https://image.tmdb.org/t/p/w500#{item.poster_path}\"\n  end\nend\n```\n\n4. Add eager loading to prevent N+1:\n```ruby\n# MediaShowPresenter line 87\nwatchlist_items = current_user.watchlist_items\n  .includes(:media_item)\n  .where(media_item: { tmdb_id: tmdb_id })\n```",
+        "testStrategy": "1. Verify typo is fixed and doesn't break functionality\n2. Test that shared concern works in all presenters\n3. Check N+1 queries are eliminated with bullet gem\n4. Ensure no dead code remains",
+        "priority": "medium",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": "18",
+        "title": "Implement proper state management to replace window.location.reload",
+        "description": "Replace window.location.reload() calls with proper React state updates using Inertia's router",
+        "details": "Replace window.location.reload() in MediaShow.tsx:\n\n```typescript\nimport { router } from '@inertiajs/react';\n\n// Instead of window.location.reload()\nconst handleAddToWatchlist = async () => {\n  try {\n    await api.watchlist.add(mediaId, mediaType);\n    // Refresh props from server\n    router.reload({ only: ['watchlistItem', 'partnerWatchlistItem'] });\n  } catch (error) {\n    // Handle error\n  }\n};\n\n// For removing from watchlist\nconst handleRemove = async () => {\n  try {\n    await api.watchlist.remove(watchlistId);\n    router.reload({ only: ['watchlistItem', 'partnerWatchlistItem'] });\n  } catch (error) {\n    // Handle error\n  }\n};\n```\n\nAlternatively, use optimistic updates:\n```typescript\nconst [watchlistItem, setWatchlistItem] = useState(props.watchlistItem);\n\nconst handleToggleWatched = async () => {\n  // Optimistic update\n  setWatchlistItem(prev => ({ ...prev, watched: !prev.watched }));\n  \n  try {\n    await api.watchlist.markWatched(watchlistItem.id);\n  } catch (error) {\n    // Revert on error\n    setWatchlistItem(prev => ({ ...prev, watched: !prev.watched }));\n  }\n};\n```",
+        "testStrategy": "1. Verify no window.location.reload() calls remain\n2. Test that UI updates immediately without full page refresh\n3. Check optimistic updates revert on API failure\n4. Ensure state stays in sync with server",
+        "priority": "medium",
+        "dependencies": [
+          "13",
+          "15"
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": "19",
+        "title": "Clean up styling and remove legacy CSS",
+        "description": "Remove all inline style objects, unused CSS classes, and consolidate react-burger-menu styling to Tailwind",
+        "details": "1. Remove unused button classes from app/assets/stylesheets/application.css\n\n2. Convert react-burger-menu inline styles to Tailwind:\n```typescript\n// Instead of inline styles object\nconst burgerStyles = {\n  bmMenuWrap: 'fixed h-full',\n  bmMenu: 'bg-brand-purple p-8',\n  bmItemList: 'text-white',\n  bmItem: 'mb-4 hover:text-brand-accent transition-colors',\n  bmOverlay: 'bg-black/50'\n};\n\n// Use className prop\n<Menu \n  className={burgerStyles.bmMenu}\n  itemListClassName={burgerStyles.bmItemList}\n  // ...\n/>\n```\n\n3. Remove all console.log statements:\n```bash\n# Find all console.log\ngrep -r \"console.log\" app/javascript/\n```\n\n4. Document styling conventions in CLAUDE.md:\n```markdown\n## Styling Conventions\n\n1. Use Tailwind classes exclusively\n2. Design tokens for colors: brand-dark, brand-purple, brand-accent\n3. Semantic sizing: media-card, media-thumb\n4. Utility classes: scrollbar-hide, gradient-overlay\n5. Icons: Lucide React with color/size props\n```",
+        "testStrategy": "1. Verify no inline style objects remain\n2. Check burger menu styling works with Tailwind\n3. Confirm no console.logs in production build\n4. Test all UI components maintain visual consistency",
+        "priority": "low",
+        "dependencies": [
+          "11",
+          "12"
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": "20",
+        "title": "Add social login and email verification",
+        "description": "Implement Google OAuth login and email verification flow, evaluating best approach between Devise extensions or modern auth service",
+        "details": "Evaluate and implement auth enhancement:\n\nOption A - Devise with OmniAuth:\n```ruby\n# Gemfile\ngem 'omniauth'\ngem 'omniauth-google-oauth2'\ngem 'omniauth-rails_csrf_protection'\n\n# config/initializers/devise.rb\nconfig.omniauth :google_oauth2, ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_CLIENT_SECRET']\n\n# User model\ndevise :omniauthable, :confirmable, omniauth_providers: [:google_oauth2]\n```\n\nOption B - Clerk integration:\n```typescript\n// Install Clerk\nnpm install @clerk/clerk-react\n\n// Wrap app with ClerkProvider\nimport { ClerkProvider } from '@clerk/clerk-react';\n\n<ClerkProvider publishableKey={process.env.CLERK_PUBLISHABLE_KEY}>\n  <App />\n</ClerkProvider>\n```\n\nAdd email verification:\n```ruby\n# If using Devise\nclass User < ApplicationRecord\n  devise :confirmable\nend\n\n# Migration\nadd_column :users, :confirmation_token, :string\nadd_column :users, :confirmed_at, :datetime\nadd_column :users, :confirmation_sent_at, :datetime\n```",
+        "testStrategy": "1. Test Google OAuth login flow end-to-end\n2. Verify email confirmation sends and works\n3. Check existing users can link Google account\n4. Test error handling for OAuth failures\n5. Ensure mobile OAuth flow works properly",
+        "priority": "low",
+        "dependencies": [
+          "14"
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "version": "1.0.0",
+      "lastModified": "2026-01-24T10:01:46.297Z",
+      "taskCount": 10,
+      "completedCount": 1,
+      "tags": [
+        "master"
+      ]
+    }
+  }
+}
