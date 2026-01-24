@@ -34,8 +34,9 @@
         "testStrategy": "1. Test CSRF token is automatically included in all requests\n2. Verify error interceptor handles 401/403/500 responses\n3. Check that all existing axios calls are replaced\n4. Test TypeScript autocompletion for API methods",
         "priority": "high",
         "dependencies": [],
-        "status": "pending",
-        "subtasks": []
+        "status": "done",
+        "subtasks": [],
+        "updatedAt": "2026-01-24T10:54:19.077Z"
       },
       {
         "id": "14",
@@ -130,9 +131,9 @@
     ],
     "metadata": {
       "version": "1.0.0",
-      "lastModified": "2026-01-24T10:01:46.297Z",
+      "lastModified": "2026-01-24T10:54:19.081Z",
       "taskCount": 10,
-      "completedCount": 1,
+      "completedCount": 2,
       "tags": [
         "master"
       ]
