@@ -4,19 +4,20 @@ import { NavProps } from "../shared/Nav";
 
 interface DefaultLayoutProps {
   children: React.ReactNode;
-  nav: NavProps;
+  nav?: NavProps;
+  transparentNav?: boolean;
 }
 
-const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children, nav }) => {
+const DefaultLayout: React.FC<DefaultLayoutProps> = ({
+  children,
+  nav,
+  transparentNav = false,
+}) => {
   return (
-    <>
-      <Nav {...nav} />
-      <p className="px-2 notice">
-        {/* Notice placeholder for flash messages */}
-      </p>
-      <p className="px-2 alert">{/* Alert placeholder for flash messages */}</p>
-      {children}
-    </>
+    <div className="min-h-screen bg-theme-primary">
+      {nav && <Nav {...nav} transparent={transparentNav} />}
+      <main>{children}</main>
+    </div>
   );
 };
 

@@ -5,8 +5,6 @@ import Button from "../shared/Button";
 import {
   HeartIconFilled,
   HeartIconOutline,
-  PlusIcon,
-  TickIcon,
   TooltipIcon,
   TvIcon,
 } from "../shared/icons";
@@ -16,7 +14,6 @@ import { api } from "../../lib/api-client";
 import classNames from "classnames";
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
-import Text from "../shared/Text";
 
 export interface MediaShowProps {
   media: {
@@ -93,12 +90,6 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
     string | null
   >(null);
 
-  const listIcon = media.watchlistStatus.inSharedWatchlist ? (
-    <TickIcon height={20} width={20} />
-  ) : (
-    <PlusIcon height={20} width={20} />
-  );
-
   async function addToList(media: MediaShowProps["media"]) {
     try {
       await api.watchlist.add(media.tmdbId, media.type);
@@ -157,39 +148,29 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
   };
 
   const renderStreamOptions = () => (
-    <div>
-      <Text text="Streaming Options" type="h2" alignment="left" />
+    <div className="space-y-4">
+      <h3 className="text-xl md:text-2xl font-semibold text-theme-primary">
+        Where to Watch
+      </h3>
       {media.streamOptions.stream.length > 0 ? (
-        <div className="flex flex-col gap-y-2">
+        <div className="flex flex-wrap gap-3">
           {media.streamOptions.stream.map((streamOption) => (
-            <div key={streamOption.providerName} className="flex gap-x-2">
+            <div
+              key={streamOption.providerName}
+              className="flex items-center gap-3 px-4 py-2 bg-theme-secondary rounded-lg"
+            >
               <img
                 src={streamOption.logoPath}
-                className="w-8 h-8 object-cover"
+                className="w-8 h-8 rounded object-cover"
+                alt={streamOption.providerName}
               />
-              <Text text={streamOption.providerName} type="p" />
+              <span className="text-theme-primary">{streamOption.providerName}</span>
             </div>
           ))}
         </div>
       ) : (
-        <Text text="No streaming options available" type="p" alignment="left" />
+        <p className="text-theme-secondary">No streaming options available</p>
       )}
-    </div>
-  );
-
-  const renderHeader = () => (
-    <div className="flex justify-between items-center">
-      <Text text={media.title || media.name} type={"h1"} alignment="left" />
-    </div>
-  );
-
-  const renderDetails = () => (
-    <div className="flex justify-between items-center">
-      <div className="flex gap-x-2">
-        <span>{media.releaseDate}</span>
-        <span className="font-thin">{media.adult ? "15+" : "U - 12"}</span>
-        <span>{media.runtime} minutes</span>
-      </div>
     </div>
   );
 
@@ -198,7 +179,7 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
       {inAnyWatchlist && <HeartIconFilled width={30} height={30} />}
       <div className="relative flex">
         {media.watchlistStatus.inPersonalWatchlist && (
-          <div className="w-10 h-10 rounded-full overflow-hidden">
+          <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-theme-primary">
             {!!media.watchlistStatus.userImage ? (
               <img
                 src={media.watchlistStatus.userImage}
@@ -214,7 +195,7 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
         {media.watchlistStatus.inSharedWatchlist && (
           <div
             className={classNames(
-              "w-10 h-10 rounded-full overflow-hidden z-10 -left-2 relative"
+              "w-10 h-10 rounded-full overflow-hidden z-10 -ml-2 ring-2 ring-theme-primary"
             )}
           >
             {!!media.watchlistStatus.watchlistPartnerImage ? (
@@ -234,7 +215,7 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
   );
 
   const renderActions = () => (
-    <div className="flex gap-x-2 items-center">
+    <div className="flex gap-x-3 items-center">
       <a className="watch-icon">
         <TooltipIcon width={20} height={20} />
       </a>
@@ -255,52 +236,85 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
 
   const renderMedia = (media: MediaShowProps["media"]) => {
     return (
-      <div className="px-2">
-        <div className="flex flex-col gap-y-2 mb-2">
-          {renderHeader()}
-          {renderDetails()}
-          <div className="flex justify-between items-center">
-            {renderWatchlistStatus()}
-            {renderActions()}
+      <div className="min-h-screen">
+        {media.backdropPath && (
+          <div className="relative">
+            <Backdrop backdropPath={media.backdropPath} />
+            <button
+              className="absolute bottom-4 right-4 md:bottom-6 md:right-6 p-3 bg-white rounded-full shadow-lg hover:scale-110 transition-transform"
+              onClick={() => {
+                !media.watchlistStatus.inPersonalWatchlist
+                  ? addToList(media)
+                  : removeFromList(
+                      media.watchlistStatus.personalWatchlistMediaItem
+                    );
+              }}
+            >
+              {media.watchlistStatus.inPersonalWatchlist ? (
+                <HeartIconFilled width={28} height={28} />
+              ) : (
+                <HeartIconOutline width={28} height={28} />
+              )}
+            </button>
+          </div>
+        )}
+
+        <div className="page-container section-spacing">
+          <div className="max-w-4xl mx-auto space-y-8">
+            <div className="space-y-4">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-theme-primary">
+                {media.title || media.name}
+              </h1>
+
+              <div className="flex flex-wrap items-center gap-3 text-theme-secondary">
+                <span>{media.releaseDate}</span>
+                <span className="w-1 h-1 rounded-full bg-theme-secondary" />
+                <span>{media.adult ? "15+" : "U - 12"}</span>
+                <span className="w-1 h-1 rounded-full bg-theme-secondary" />
+                <span>{media.runtime} min</span>
+              </div>
+
+              <div className="flex flex-wrap justify-between items-center gap-4 pt-2">
+                {renderWatchlistStatus()}
+                {renderActions()}
+              </div>
+            </div>
+
+            {afterInitialLoadErrors && (
+              <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-500">
+                {afterInitialLoadErrors}
+              </div>
+            )}
+
+            {media.ratings && (
+              <div>
+                <Ratings ratings={media.ratings} />
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <h3 className="text-xl md:text-2xl font-semibold text-theme-primary">
+                Overview
+              </h3>
+              <p className="text-theme-secondary leading-relaxed text-lg">
+                {media.overview}
+              </p>
+            </div>
+
+            <hr className="border-theme" />
+
+            {renderStreamOptions()}
           </div>
         </div>
-        <div className="relative">
-          {media.backdropPath && <Backdrop backdropPath={media.backdropPath} />}
-          <span
-            className="absolute bottom-2 right-2 p-2 bg-white rounded-full"
-            onClick={() => {
-              !media.watchlistStatus.inPersonalWatchlist
-                ? addToList(media)
-                : removeFromList(
-                    media.watchlistStatus.personalWatchlistMediaItem
-                  );
-            }}
-          >
-            {media.watchlistStatus.inPersonalWatchlist ? (
-              <HeartIconFilled width={30} height={30} />
-            ) : (
-              <HeartIconOutline width={30} height={30} />
-            )}
-          </span>
-        </div>
-        <div className="flex flex-col gap-y-2 mt-2">
-          {afterInitialLoadErrors && (
-            <div className="text-red-500">{afterInitialLoadErrors}</div>
-          )}
-          <div>{!!media.ratings && <Ratings ratings={media.ratings} />}</div>
-          <div>{media.overview}</div>
-        </div>
-        <br />
-        <hr />
-        <br />
-        {renderStreamOptions()}
+
         <Tooltip
           style={{
             backgroundColor: "rgb(55 48 163)",
             whiteSpace: "wrap",
-            maxWidth: "50%",
+            maxWidth: "300px",
             zIndex: 1000,
-            borderRadius: "1rem",
+            borderRadius: "0.75rem",
+            padding: "0.75rem 1rem",
           }}
           anchorSelect=".watch-icon"
           place="bottom"
@@ -315,23 +329,21 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
     if (!errors) return null;
 
     return (
-      <div className="flex flex-col items-center justify-center h-full">
+      <div className="min-h-screen flex flex-col items-center justify-center page-container text-center">
         <img
           src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExaXQ5eXh4ZnJjaDhteGdja3czaDh0eG5mazU4aW9tOWloZjNjeGc1dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3owzWj2ViX6FJj5xMQ/giphy.gif"
           alt="Error illustration"
-          className="w-media-poster object-cover"
+          className="max-w-md w-full rounded-lg"
         />
-        <Text text="Oops! Something went wrong" type="h1" />
-        <Text text={errors} type="p" />
+        <h1 className="text-2xl md:text-3xl font-bold text-theme-primary mt-8">
+          Oops! Something went wrong
+        </h1>
+        <p className="text-theme-secondary mt-2">{errors}</p>
       </div>
     );
   };
 
-  return (
-    <div className="flex flex-col gap-y-2">
-      {!!errors ? renderErrors(errors) : renderMedia(media)}
-    </div>
-  );
+  return errors ? renderErrors(errors) : renderMedia(media);
 };
 
 export default MediaShow;

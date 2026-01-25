@@ -70,7 +70,7 @@ class SaveMedia < Base
   end
 
   def poster_path(path)
-    "#{TMDB_BASE_URL}/original#{path}"
+    "#{TMDB_BASE_URL}/w342#{path}"
   end
 
   def assign_backdrop(new_media) # rubocop:disable Metrics/AbcSize

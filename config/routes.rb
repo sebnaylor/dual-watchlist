@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
+    get '/', to: 'dashboard#index', as: :dashboard
     resources :users, only: %i[index show]
   end
 

@@ -11,12 +11,14 @@ const Watchlist: React.FC<WatchlistProps> = ({ watchlistItems }) => {
   const hasWatchedItem = allItems.some((item) => item.watched);
 
   return (
-    <div>
+    <div className="space-y-8 lg:space-y-12">
       <div className="flex justify-between items-center">
-        <h2 className="text-white text-2xl font-semibold">Watchlist</h2>
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-theme-primary">
+          Your Watchlist
+        </h2>
       </div>
       <MediaSection title="Movies" items={watchlistItems.movies} />
-      <MediaSection title="TV" items={watchlistItems.tv} />
+      <MediaSection title="TV Shows" items={watchlistItems.tv} />
       {hasWatchedItem && (
         <MediaSection title="Recently Watched" items={allItems} showWatched />
       )}

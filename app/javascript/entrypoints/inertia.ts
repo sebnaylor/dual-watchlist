@@ -2,25 +2,21 @@ import { createInertiaApp } from "@inertiajs/react";
 import { createElement, ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import DefaultLayout from "../components/layouts/DefaultLayout";
+import { ThemeProvider } from "../context/ThemeContext";
+import { NavProps } from "../components/shared/Nav";
 
-// Temporary type definition, until @inertiajs/react provides one
+interface PageProps {
+  nav?: NavProps;
+  [key: string]: unknown;
+}
+
 type ResolvedComponent = {
-  default: React.ComponentType & {
+  default: React.ComponentType<PageProps> & {
     layout?: (page: ReactNode) => ReactNode;
   };
 };
 
 createInertiaApp({
-  // Set default page title
-  // see https://inertia-rails.dev/guide/title-and-meta
-  //
-  // title: title => title ? `${title} - App` : 'App',
-
-  // Disable progress bar
-  //
-  // see https://inertia-rails.dev/guide/progress-indicators
-  // progress: false,
-
   resolve: (name) => {
     const pages = import.meta.glob<ResolvedComponent>("../pages/**/*.tsx", {
       eager: true,
@@ -31,13 +27,11 @@ createInertiaApp({
       console.error(`Missing Inertia page component: '${name}.tsx'`);
     }
 
-    // To use a default layout, import the Layout component
-    // and use the following line.
-    // see https://inertia-rails.dev/guide/pages#default-layouts
-    //
-    if (page?.default) {
-      page.default.layout ||= (pageNode: ReactNode) =>
-        createElement(DefaultLayout, null, pageNode);
+    if (page?.default && !page.default.layout) {
+      page.default.layout = (pageNode: ReactNode) => {
+        const props = (pageNode as React.ReactElement<PageProps>).props;
+        return createElement(DefaultLayout, { nav: props?.nav, children: pageNode }, pageNode);
+      };
     }
 
     return page;
@@ -45,7 +39,9 @@ createInertiaApp({
 
   setup({ el, App, props }) {
     if (el) {
-      createRoot(el).render(createElement(App, props));
+      createRoot(el).render(
+        createElement(ThemeProvider, null, createElement(App, props))
+      );
     } else {
       console.error(
         "Missing root element.\n\n" +

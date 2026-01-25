@@ -11,10 +11,10 @@ class NavPresenter < BasePresenter
 
   def props
     {
-      search_page_path: search_index_path,
+      searchPagePath: search_index_path,
       display: request.path == '/' ? 'absolute' : 'relative',
-      user_is_admin: current_user&.admin?,
-      user_is_masquerading: is_masquerading
+      userIsAdmin: current_user&.admin?,
+      userIsMasquerading: is_masquerading
     }
   end
 

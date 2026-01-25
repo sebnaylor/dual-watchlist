@@ -32,7 +32,7 @@ class MediaShowPresenter < BasePresenter
       tmdb_id: media['tmdb_id'] || media['id'],
       imdb_id: media['imdb_id'],
       adult: media['adult'],
-      backdrop_path: tmdb_image_path(media['backdrop_path']),
+      backdrop_path: tmdb_backdrop_path(media['backdrop_path'], size: :large),
       backdrop_path_aspect_ratio: media['backdrop_aspect_ratio'],
       budget: media['budget'],
       name: media['name'],
@@ -40,7 +40,7 @@ class MediaShowPresenter < BasePresenter
       original_language: media['original_language'],
       original_title: media['original_title'],
       overview: media['overview'],
-      poster_path: tmdb_image_path(media['poster_path']),
+      poster_path: tmdb_poster_path(media['poster_path'], size: :large),
       ratings: Ratings::GetAllRatings.call(media['imdb_id']),
       release_date: release_date(media['release_date']),
       revenue: media['revenue'],
@@ -139,7 +139,7 @@ class MediaShowPresenter < BasePresenter
 
     uk_results[providers].map do |provider|
       {
-        logo_path: tmdb_image_path(provider['logo_path']),
+        logo_path: tmdb_poster_path(provider['logo_path'], size: :small),
         provider_name: provider['provider_name']
       }
     end

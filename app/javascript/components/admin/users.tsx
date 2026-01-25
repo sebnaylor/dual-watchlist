@@ -1,12 +1,12 @@
 import React from "react";
 
-interface UsersProps {}
-
-const Users: React.FC<UsersProps> = ({}) => {
+const _Users: React.FC = () => {
   return (
     <div>
-      <h1>Admin Users</h1>  
+      <h1>Admin Users</h1>
       <ul></ul>
     </div>
   );
 };
+
+export default _Users;

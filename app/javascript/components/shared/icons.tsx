@@ -8,6 +8,8 @@ import {
   Search,
   GitMerge,
   Copy,
+  Moon,
+  Sun,
 } from "lucide-react";
 
 interface IconProps {
@@ -111,6 +113,20 @@ const CopyIcon: React.FC<IconProps> = ({
   className,
 }) => <Copy width={width} height={height} color={color} className={className} />;
 
+const MoonIcon: React.FC<IconProps> = ({
+  width = 20,
+  height = 20,
+  color = "white",
+  className,
+}) => <Moon width={width} height={height} color={color} className={className} />;
+
+const SunIcon: React.FC<IconProps> = ({
+  width = 20,
+  height = 20,
+  color = "white",
+  className,
+}) => <Sun width={width} height={height} color={color} className={className} />;
+
 export {
   ShareIcon,
   TickIcon,
@@ -122,4 +138,6 @@ export {
   SearchIcon,
   MergeIcon,
   CopyIcon,
+  MoonIcon,
+  SunIcon,
 };

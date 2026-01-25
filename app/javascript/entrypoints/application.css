@@ -15,7 +15,42 @@
 
   --height-media-backdrop: 200px;
   --height-media-hero: 500px;
+  --height-media-hero-lg: 600px;
   --width-media-poster: 500px;
+}
+
+:root {
+  --bg-primary: #1F1E20;
+  --bg-secondary: #2c2638;
+  --bg-tertiary: #3d3651;
+  --text-primary: #ffffff;
+  --text-secondary: #b8b7ad;
+  --text-muted: #8a8980;
+  --border-color: #4a4560;
+  --input-bg: #3d3651;
+}
+
+:root.light {
+  --bg-primary: #f8f9fa;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #e9ecef;
+  --text-primary: #1F1E20;
+  --text-secondary: #4a4560;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
+  --input-bg: #ffffff;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
 }
 
 @layer utilities {
@@ -27,7 +62,7 @@
     display: none;
   }
   .gradient-overlay {
-    @apply bg-gradient-to-t from-black/80 to-transparent;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
   }
   .bg-brand-dark {
     background-color: var(--color-brand-dark);
@@ -41,4 +76,77 @@
   .text-brand-accent {
     color: var(--color-brand-accent);
   }
+
+  .bg-theme-primary {
+    background-color: var(--bg-primary);
+  }
+  .bg-theme-secondary {
+    background-color: var(--bg-secondary);
+  }
+  .bg-theme-tertiary {
+    background-color: var(--bg-tertiary);
+  }
+  .text-theme-primary {
+    color: var(--text-primary);
+  }
+  .text-theme-secondary {
+    color: var(--text-secondary);
+  }
+  .text-theme-muted {
+    color: var(--text-muted);
+  }
+  .border-theme {
+    border-color: var(--border-color);
+  }
+  .input-theme {
+    background-color: var(--input-bg);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+  }
+
+  .page-container {
+    width: 100%;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  @media (min-width: 768px) {
+    .page-container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .page-container {
+      padding-left: 4rem;
+      padding-right: 4rem;
+    }
+  }
+  @media (min-width: 1280px) {
+    .page-container {
+      padding-left: 6rem;
+      padding-right: 6rem;
+    }
+  }
+
+  .section-spacing {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  @media (min-width: 1024px) {
+    .section-spacing {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+  }
+
+  .logo-theme-aware {
+    filter: none;
+  }
+}
+
+:root.light .logo-theme-aware {
+  filter: invert(1) brightness(0.2);
 }

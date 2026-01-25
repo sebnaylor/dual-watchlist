@@ -15,7 +15,7 @@ class HomeIndexPresenter < BasePresenter
       preview_movie: {
         tmdb_id: movie['id'],
         title: movie['original_title'],
-        poster_img: tmdb_image_path(movie['poster_path']),
+        poster_img: tmdb_backdrop_path(movie['backdrop_path'], size: :large),
         ratings: Ratings::GetAllRatings.call(movie['imdb_id']),
         runtime: movie['runtime'],
         genres: movie['genres'].flat_map { |genre| genre['name'] }

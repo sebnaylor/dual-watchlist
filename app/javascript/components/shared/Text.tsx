@@ -4,20 +4,22 @@ import React from "react";
 interface TextProps {
   text: string;
   type: "h1" | "h2" | "h3" | "p";
-  alignment?: "left";
+  alignment?: "left" | "center" | "right";
 }
 
-const Text: React.FC<TextProps> = ({ text, type, alignment }) => {
+const Text: React.FC<TextProps> = ({ text, type, alignment = "center" }) => {
   const Tag = type;
 
   return (
     <Tag
-      className={classNames("text-white text-center", {
-        "text-2xl font-medium": type === "h1",
-        "text-xl font-normal": type === "h2",
-        "text-lg font-light": type === "h3",
-        "text-base font-light": type === "p",
-        "!text-left": alignment === "left",
+      className={classNames("text-theme-primary", {
+        "text-2xl md:text-3xl font-bold": type === "h1",
+        "text-xl md:text-2xl font-semibold": type === "h2",
+        "text-lg md:text-xl font-medium": type === "h3",
+        "text-base text-theme-secondary": type === "p",
+        "text-left": alignment === "left",
+        "text-center": alignment === "center",
+        "text-right": alignment === "right",
       })}
     >
       {text}

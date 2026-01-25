@@ -2,7 +2,6 @@ import React from "react";
 import { router } from "@inertiajs/react";
 import Button from "../shared/Button";
 import { api } from "../../lib/api-client";
-import Text from "../shared/Text";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { CopyIcon, MergeIcon } from "../shared/icons";
 
@@ -64,47 +63,61 @@ const Analytics: React.FC<AnalyticsProps> = ({
   }
 
   const noWatchlistPartnerState = () => (
-    <div className="flex flex-col gap-y-2 px-2">
-      <Text text="Watchlist Connect" type="h1" />
-      <Text
-        text="To sync your watchlist with another user, ask them to send you their
-        join code. Enter their join code below"
-        type="p"
-      />
-      <br className="border-2 border-white" />
-      <div className="border-white border-2 rounded-lg shadow-md flex flex-col gap-y-2 p-2 bg-darkPurple max-w-md text-center">
-        <div>{user.joinCode}</div>
-        <span className="max-w-28 mx-auto">
-          <Button
-            text="Copy"
-            type="tertiary"
-            pressed={copyPressed}
-            icon={<CopyIcon height={20} width={20} />}
-            onClick={() => {
-              navigator.clipboard.writeText(user.joinCode);
-              setCopyPressed(true);
-            }}
-          />
-        </span>
-      </div>
-      <div className="absolute bottom-4 w-full flex flex-col gap-y-2">
-        <div className="flex items-center justify-center text-black">
-          <input
-            className="text-center w-full"
-            placeholder="Friend's share code"
-            onChange={handleInputChange}
-          />
+    <div className="page-container section-spacing">
+      <div className="max-w-2xl mx-auto">
+        <div className="text-center mb-8 md:mb-12">
+          <h1 className="text-3xl md:text-4xl font-bold text-theme-primary mb-4">
+            Watchlist Connect
+          </h1>
+          <p className="text-theme-secondary text-lg">
+            Sync your watchlist with another user to track what you watch together
+          </p>
         </div>
-        <div className="flex items-center justify-center">
-          <Button
-            text="Combine watchlists"
-            type="primary"
-            pressed={false}
-            icon={<MergeIcon width={20} height={20} />}
-            onClick={() => {
-              postRequest();
-            }}
-          />
+
+        <div className="bg-theme-secondary rounded-2xl p-6 md:p-8 mb-8">
+          <h2 className="text-lg font-semibold text-theme-primary mb-4">
+            Your Join Code
+          </h2>
+          <div className="flex items-center gap-4 p-4 bg-theme-tertiary rounded-xl">
+            <code className="flex-1 text-xl md:text-2xl font-mono text-theme-primary text-center">
+              {user.joinCode}
+            </code>
+            <Button
+              text={copyPressed ? "Copied!" : "Copy"}
+              type="tertiary"
+              pressed={copyPressed}
+              icon={<CopyIcon height={18} width={18} />}
+              onClick={() => {
+                navigator.clipboard.writeText(user.joinCode);
+                setCopyPressed(true);
+                setTimeout(() => setCopyPressed(false), 2000);
+              }}
+            />
+          </div>
+          <p className="text-theme-muted text-sm mt-3">
+            Share this code with your partner so they can connect with you
+          </p>
+        </div>
+
+        <div className="bg-theme-secondary rounded-2xl p-6 md:p-8">
+          <h2 className="text-lg font-semibold text-theme-primary mb-4">
+            Join a Partner
+          </h2>
+          <div className="space-y-4">
+            <input
+              className="w-full px-4 py-3 rounded-xl input-theme border border-theme focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 transition-all outline-none text-center text-lg"
+              placeholder="Enter partner's join code"
+              onChange={handleInputChange}
+              value={joinCode}
+            />
+            <Button
+              text="Connect Watchlists"
+              type="primary"
+              pressed={false}
+              icon={<MergeIcon width={20} height={20} />}
+              onClick={postRequest}
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -113,69 +126,91 @@ const Analytics: React.FC<AnalyticsProps> = ({
   const watchlistAnalytics = () => {
     if (noOneHasWatchedAnything()) {
       return (
-        <div className="px-2">
-          Mark a watchlisted movie as watched to see some analytics
+        <div className="page-container section-spacing">
+          <div className="max-w-2xl mx-auto text-center">
+            <h1 className="text-3xl md:text-4xl font-bold text-theme-primary mb-4">
+              Watchlist Connect
+            </h1>
+            <div className="bg-theme-secondary rounded-2xl p-8 md:p-12">
+              <p className="text-theme-secondary text-lg">
+                Mark a watchlisted movie as watched to see your analytics
+              </p>
+            </div>
+          </div>
         </div>
       );
     }
 
     if (Object.keys(analytics).length > 0) {
       return (
-        <div className="flex flex-col gap-y-2 px-2">
-          <h2 className="text-white text-2xl text-center font-extralight">
-            {analytics.chartData.watchedMovieRuntimeChart.title}
-          </h2>
-          <div className="h-32">
-            <PieChart
-              colors={["blue", "red"]}
-              series={[
-                {
-                  data: analytics.chartData.watchedMovieRuntimeChart.data.map(
-                    (item, index) => ({
-                      id: index,
-                      value: item.value,
-                      label: item.label,
-                    })
-                  ),
-                },
-              ]}
-              slotProps={{
-                legend: {
-                  labelStyle: {
-                    fontSize: 10,
-                    fill: "white",
-                  },
-                  direction: "column",
-                  position: { vertical: "middle", horizontal: "right" },
-                  padding: 0,
-                },
-              }}
-            />
-          </div>
-          <div className="flex items-center font-thin text-md">
-            {analytics.chartData.watchedMovieRuntimeChart.conclusion.title}
-          </div>
+        <div className="page-container section-spacing">
+          <div className="max-w-3xl mx-auto">
+            <h1 className="text-3xl md:text-4xl font-bold text-theme-primary mb-8 text-center">
+              Watchlist Connect
+            </h1>
 
-          {analytics.chartData.watchedMovieRuntimeChart.conclusion
-            .runtimeDifference != 0 && (
-            <>
-              <div className="mx-auto">
-                <img
-                  src={
-                    analytics.chartData.watchedMovieRuntimeChart.conclusion
-                      .nextUserToWatchImage
-                  }
-                  className="w-10 h-10 rounded-full object-cover"
+            <div className="bg-theme-secondary rounded-2xl p-6 md:p-8 mb-8">
+              <h2 className="text-xl md:text-2xl font-semibold text-theme-primary text-center mb-6">
+                {analytics.chartData.watchedMovieRuntimeChart.title}
+              </h2>
+              <div className="h-48 md:h-64">
+                <PieChart
+                  colors={["#3730a3", "#f05542"]}
+                  series={[
+                    {
+                      data: analytics.chartData.watchedMovieRuntimeChart.data.map(
+                        (item, index) => ({
+                          id: index,
+                          value: item.value,
+                          label: item.label,
+                        })
+                      ),
+                      innerRadius: 30,
+                      paddingAngle: 2,
+                      cornerRadius: 4,
+                    },
+                  ]}
+                  slotProps={{
+                    legend: {
+                      labelStyle: {
+                        fontSize: 14,
+                        fill: "var(--text-primary)",
+                      },
+                      direction: "column",
+                      position: { vertical: "middle", horizontal: "right" },
+                      padding: 0,
+                    },
+                  }}
                 />
               </div>
-              <div className="flex items-center font-thin text-md">
-                {
-                  analytics.chartData.watchedMovieRuntimeChart.conclusion
-                    .subtitle
-                }
-              </div>
-            </>
-          )}
+            </div>
+
+            <div className="bg-theme-secondary rounded-2xl p-6 md:p-8">
+              <p className="text-theme-primary text-lg text-center">
+                {analytics.chartData.watchedMovieRuntimeChart.conclusion.title}
+              </p>
+
+              {analytics.chartData.watchedMovieRuntimeChart.conclusion
+                .runtimeDifference != 0 && (
+                <div className="mt-6 flex flex-col items-center gap-4">
+                  <img
+                    src={
+                      analytics.chartData.watchedMovieRuntimeChart.conclusion
+                        .nextUserToWatchImage
+                    }
+                    className="w-16 h-16 rounded-full object-cover ring-4 ring-brand-primary"
+                    alt="Next user to watch"
+                  />
+                  <p className="text-theme-secondary text-center">
+                    {
+                      analytics.chartData.watchedMovieRuntimeChart.conclusion
+                        .subtitle
+                    }
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       );
     }

@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: "class",
   content: [
     "./public/*.html",
     "./app/helpers/**/*.rb",
@@ -17,10 +18,8 @@ module.exports = {
         "2xl": "1536px",
       },
       colors: {
-        // Legacy aliases (deprecated - use brand.* instead)
         backgroundBlack: "#1F1E20",
         darkPurple: "#2c2638",
-        // Design system tokens
         brand: {
           dark: "#1F1E20",
           purple: "#2c2638",
@@ -36,6 +35,7 @@ module.exports = {
       height: {
         "media-backdrop": "200px",
         "media-hero": "500px",
+        "media-hero-lg": "600px",
       },
       width: {
         "media-poster": "500px",

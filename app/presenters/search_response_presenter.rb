@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class SearchResponsePresenter < BasePresenter
+  include MediaHelper
+
   def initialize(search_response)
     super()
     @search_response = search_response
@@ -19,14 +21,8 @@ class SearchResponsePresenter < BasePresenter
   def media(media_response)
     {
       tmdb_id: media_response['id'],
-      poster_path: poster_path(media_response),
+      poster_path: tmdb_poster_path(media_response['poster_path'], size: :medium),
       media_type: media_response['media_type'].capitalize
     }
-  end
-
-  def poster_path(media_response)
-    return nil if media_response['poster_path'].nil?
-
-    "#{TMDB_BASE_URL}/original#{media_response['poster_path']}"
   end
 end
