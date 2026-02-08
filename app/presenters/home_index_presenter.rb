@@ -39,14 +39,7 @@ class HomeIndexPresenter < BasePresenter
   end
 
   def preview_movies
-    @preview_movies ||= begin
-      movie_items = preview_items.movie.limit(5).to_a
-      if movie_items.any?
-        movie_items.map { |item| Tmdb::Movie.detail(item.media.tmdb_id) }
-      else
-        Tmdb::Movie.popular.first(5).map { |m| Tmdb::Movie.detail(m.id) }
-      end
-    end
+    @preview_movies ||= Tmdb::Movie.popular.first(5).map { |m| Tmdb::Movie.detail(m.id) }
   end
 
   def has_shared_watchlist?
@@ -55,14 +48,6 @@ class HomeIndexPresenter < BasePresenter
 
   def display_items
     @display_items ||= has_shared_watchlist? ? shared_watchlist_items : personal_watchlist_items
-  end
-
-  def preview_items
-    @preview_items ||= if has_shared_watchlist?
-                          deduped_watchlist_items.presence || personal_watchlist_items
-                        else
-                          personal_watchlist_items
-                        end
   end
 
   def personal_watchlist_items

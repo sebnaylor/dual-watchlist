@@ -9,7 +9,7 @@ interface MediaCarouselProps {
 
 const MediaCarousel: React.FC<MediaCarouselProps> = ({
   movies,
-  interval = 5000,
+  interval = 8000,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -22,7 +22,7 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({
       setTimeout(() => {
         setCurrentIndex((prev) => (prev + 1) % movies.length);
         setIsTransitioning(false);
-      }, 500);
+      }, 1000);
     }, interval);
 
     return () => clearInterval(timer);
@@ -37,7 +37,7 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({
       {movies.map((movie, index) => (
         <div
           key={movie.tmdbId}
-          className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-500 ease-in-out ${
+          className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000 ease-in-out ${
             index === currentIndex && !isTransitioning
               ? "opacity-100"
               : "opacity-0"
@@ -56,7 +56,7 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({
       >
         <div className="page-container">
           <div
-            className={`flex flex-col gap-3 md:gap-4 max-w-2xl transition-opacity duration-500 ${
+            className={`flex flex-col gap-3 md:gap-4 max-w-2xl transition-opacity duration-1000 ${
               isTransitioning ? "opacity-0" : "opacity-100"
             }`}
           >

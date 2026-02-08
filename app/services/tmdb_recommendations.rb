@@ -8,33 +8,38 @@ class TmdbRecommendations
   end
 
   def call
-    return [] unless user.watchlist_partner
-
-    source_media = shared_watchlist_media.sample(5)
+    source_media = personal_watchlist_media.sample(8)
     return [] if source_media.empty?
 
-    source_media.filter_map do |media|
-      recs = fetch_recommendations(media.tmdb_id, media.type).first(6)
-
-      next if recs.empty?
-
-      {
-        source_title: media.title,
-        source_tmdb_id: media.tmdb_id,
-        source_type: media.type,
-        recommendations: recs
-      }
+    pairs = source_media.flat_map do |media|
+      recs = fetch_recommendations(media.tmdb_id, media.type).first(3)
+      recs.reject { |r| existing_tmdb_ids.include?(r['id']) }.map do |rec|
+        {
+          source_title: media.title,
+          source_tmdb_id: media.tmdb_id,
+          source_type: media.type,
+          recommendation: rec
+        }
+      end
     end
+
+    pairs.shuffle
   end
 
   private
 
   attr_reader :user
 
-  def shared_watchlist_media
-    user.shared_watchlist_media_items
+  def existing_tmdb_ids
+    @existing_tmdb_ids ||= user.watchlist_media_items.joins(:media).pluck('media.tmdb_id').to_set
+  end
+
+  def personal_watchlist_media
+    return [] unless user.personal_watchlist
+
+    user.watchlist_media_items
         .joins(:media)
-        .select('DISTINCT ON (media_id) watchlist_media_items.*, media.tmdb_id, media.title, media.type')
+        .select('watchlist_media_items.*, media.tmdb_id, media.title, media.type')
         .map(&:media)
   end
 

@@ -172,7 +172,8 @@ const StatCard: React.FC<{
   value: number;
   icon: React.ElementType;
   color?: string;
-}> = ({ label, value, icon: Icon, color = "text-brand-primary" }) => (
+  bg?: string;
+}> = ({ label, value, icon: Icon, color = "text-brand-primary", bg = "bg-brand-primary/15" }) => (
   <div className="bg-theme-secondary rounded-xl p-5 border border-theme">
     <div className="flex items-center justify-between">
       <div>
@@ -181,7 +182,7 @@ const StatCard: React.FC<{
           {value.toLocaleString()}
         </p>
       </div>
-      <div className={`p-3 rounded-lg bg-theme-tertiary ${color}`}>
+      <div className={`p-3 rounded-lg ${bg} ${color}`}>
         <Icon size={24} />
       </div>
     </div>
@@ -198,19 +199,22 @@ const OverviewTab: React.FC<{ stats: Stats }> = ({ stats }) => (
           label="Shared Watchlists"
           value={stats.totalSharedWatchlists}
           icon={Users}
-          color="text-green-500"
+          color="text-green-400"
+          bg="bg-green-500/15"
         />
         <StatCard
           label="Personal Watchlists"
           value={stats.totalPersonalWatchlists}
           icon={List}
-          color="text-blue-500"
+          color="text-blue-400"
+          bg="bg-blue-500/15"
         />
         <StatCard
           label="Watchlist Items"
           value={stats.totalWatchlistItems}
           icon={List}
-          color="text-purple-500"
+          color="text-purple-400"
+          bg="bg-purple-500/15"
         />
       </div>
     </div>
@@ -223,19 +227,22 @@ const OverviewTab: React.FC<{ stats: Stats }> = ({ stats }) => (
           label="Movies"
           value={stats.totalMovies}
           icon={Film}
-          color="text-orange-500"
+          color="text-orange-400"
+          bg="bg-orange-500/15"
         />
         <StatCard
           label="TV Shows"
           value={stats.totalTv}
           icon={Film}
-          color="text-cyan-500"
+          color="text-cyan-400"
+          bg="bg-cyan-500/15"
         />
         <StatCard
           label="Watched Items"
           value={stats.totalWatchedItems}
           icon={BarChart3}
-          color="text-green-500"
+          color="text-green-400"
+          bg="bg-green-500/15"
         />
       </div>
     </div>
@@ -259,7 +266,7 @@ const MasqueradeButton: React.FC<{ userId: number }> = ({ userId }) => {
   return (
     <button
       onClick={handleClick}
-      className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-brand-primary hover:bg-brand-primary/10 rounded transition-colors"
+      className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-blue-400 hover:bg-blue-500/15 rounded transition-colors"
     >
       {copied ? <Check size={14} /> : <Copy size={14} />}
       {copied ? "Copied!" : "Masquerade"}
@@ -310,12 +317,12 @@ const UsersTab: React.FC<{
                 <td className="px-4 py-3">
                   <div className="flex flex-wrap gap-1.5">
                     {user.admin && (
-                      <span className="px-2 py-0.5 text-xs font-medium bg-brand-primary/20 text-brand-primary rounded">
+                      <span className="px-2 py-0.5 text-xs font-medium bg-amber-500/20 text-amber-400 rounded">
                         Admin
                       </span>
                     )}
                     {user.hasPartner && (
-                      <span className="px-2 py-0.5 text-xs font-medium bg-green-500/20 text-green-500 rounded">
+                      <span className="px-2 py-0.5 text-xs font-medium bg-green-500/20 text-green-400 rounded">
                         Partnered
                       </span>
                     )}
