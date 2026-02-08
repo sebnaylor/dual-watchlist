@@ -2,6 +2,6 @@
 
 class AddRoleToUsers < ActiveRecord::Migration[7.2]
   def change
-    add_column :users, :role, :string, default: 'default'
+    add_column :users, :role, :string, default: 'default' unless column_exists?(:users, :role)
   end
 end
