@@ -30,14 +30,23 @@ Rails.application.routes.draw do
   namespace :admin do
     get '/', to: 'dashboard#index', as: :dashboard
     resources :users, only: %i[index show]
+    resources :masquerade_tokens, only: [:create]
   end
 
+  get 'masquerade_login', to: 'masquerade_sessions#show'
+
   get 'analytics', to: 'analytics#show', as: :analytics
+  get 'recommendations', to: 'recommendations#index', as: :recommendations
   post 'analytics/create_shared_watchlist', to: 'analytics#create_shared_watchlist'
 
-  resources :watchlist_media_items, only: %i[create update destroy]
+  resources :watchlist_media_items, only: %i[create update destroy] do
+    member { patch :toggle_episode }
+  end
+  resources :imdb_watchlist_syncs, only: %i[index create show], path: 'watchlist/imdb-sync'
 
-  resources :media, only: [:show]
+  resources :media, only: [:show] do
+    member { get 'season/:season_number', to: 'media#season', as: :season }
+  end
 
   # post 'media/:id/add_to_personal_watchlist', to: 'media#add_to_personal_watchlist', as: :add_to_personal_watchlist
   delete 'media/:id/remove_from_personal_watchlist', to: 'media#remove_from_personal_watchlist', as: :remove_from_personal_watchlist

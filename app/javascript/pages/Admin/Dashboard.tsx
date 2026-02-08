@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Users, Film, List, BarChart3, ExternalLink } from "lucide-react";
+import { Users, Film, List, BarChart3, Copy, Check } from "lucide-react";
+import { api } from "../../lib/api-client";
 import PosterPlaceholder from "../../components/shared/PosterPlaceholder";
 
 interface User {
@@ -13,7 +14,6 @@ interface User {
   hasPartner: boolean;
   watchlistCount: number;
   watchedCount: number;
-  masqueradePath: string;
 }
 
 interface MediaItem {
@@ -242,6 +242,31 @@ const OverviewTab: React.FC<{ stats: Stats }> = ({ stats }) => (
   </div>
 );
 
+const MasqueradeButton: React.FC<{ userId: number }> = ({ userId }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleClick = async () => {
+    try {
+      const { data } = await api.admin.generateMasqueradeToken(userId);
+      await navigator.clipboard.writeText(data.url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // silently fail
+    }
+  };
+
+  return (
+    <button
+      onClick={handleClick}
+      className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-brand-primary hover:bg-brand-primary/10 rounded transition-colors"
+    >
+      {copied ? <Check size={14} /> : <Copy size={14} />}
+      {copied ? "Copied!" : "Masquerade"}
+    </button>
+  );
+};
+
 const UsersTab: React.FC<{
   users: User[];
   searchTerm: string;
@@ -307,13 +332,7 @@ const UsersTab: React.FC<{
                 </td>
                 <td className="px-4 py-3 text-sm text-theme-secondary">{user.createdAt}</td>
                 <td className="px-4 py-3">
-                  <a
-                    href={user.masqueradePath}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-brand-primary hover:bg-brand-primary/10 rounded transition-colors"
-                  >
-                    <ExternalLink size={14} />
-                    Masquerade
-                  </a>
+                  <MasqueradeButton userId={user.id} />
                 </td>
               </tr>
             ))}

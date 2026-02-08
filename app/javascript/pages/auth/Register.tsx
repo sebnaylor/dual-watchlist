@@ -64,7 +64,7 @@ export default function Register({ errors, csrfToken }: RegisterProps) {
         <div className="w-full max-w-md">
           <div className="lg:hidden flex items-center gap-3 mb-8">
             <img
-              className="w-10 h-10 logo-theme-aware"
+              className="w-10 h-10"
               src="https://dual-watchlist.s3.eu-north-1.amazonaws.com/logo.png"
               alt="logo"
             />

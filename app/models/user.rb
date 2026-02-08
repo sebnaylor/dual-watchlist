@@ -11,6 +11,7 @@ class User < ApplicationRecord
 
   has_one :personal_watchlist, dependent: :destroy
   has_many :watchlist_media_items, through: :personal_watchlist, source: :media_items
+  has_many :imdb_watchlist_syncs, dependent: :destroy
   has_one :shared_watchlist, through: :personal_watchlist, dependent: :destroy
   has_many :shared_watchlist_media_items, through: :shared_watchlist, source: :media_items
 

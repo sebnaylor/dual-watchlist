@@ -25,6 +25,7 @@ export interface StreamOptions {
 export interface WatchlistMediaItem {
   id: number;
   watched: boolean;
+  watchedEpisodes?: Record<string, number[]>;
 }
 
 export interface WatchlistStatus {
@@ -45,6 +46,32 @@ export interface MediaItem {
   posterPath: string;
   mediaType: MediaType;
   watched: boolean;
+}
+
+export interface SeasonSummary {
+  seasonNumber: number;
+  name: string;
+  episodeCount: number;
+  airDate: string | null;
+  posterPath: string | null;
+  voteAverage: number;
+}
+
+export interface Episode {
+  episodeNumber: number;
+  name: string;
+  overview: string;
+  airDate: string | null;
+  runtime: number | null;
+  stillPath: string | null;
+  voteAverage: number;
+}
+
+export interface SeasonDetail {
+  seasonNumber: number;
+  name: string;
+  overview: string;
+  episodes: Episode[];
 }
 
 export interface MediaDetails {
@@ -71,6 +98,7 @@ export interface MediaDetails {
   tmdbVoteAverage: string | null;
   tmdbVoteCount: string | null;
   watchlistStatus: WatchlistStatus;
+  seasons?: SeasonSummary[];
 }
 
 export interface SearchResultMedia {

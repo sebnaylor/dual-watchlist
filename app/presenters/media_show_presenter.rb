@@ -5,12 +5,13 @@ class MediaShowPresenter < BasePresenter
   include ActionView::Helpers::AssetTagHelper
   include Rails.application.routes.url_helpers
   include ActiveStorage::Blob::Analyzable
-  def initialize(media, media_type, errors, current_user)
+  def initialize(media, media_type, errors, current_user, tmdb_data: nil)
     super()
     @media = media
     @media_type = media_type
     @errors = errors
     @current_user = current_user
+    @tmdb_data = tmdb_data
   end
 
   def props
@@ -22,7 +23,7 @@ class MediaShowPresenter < BasePresenter
 
   private
 
-  attr_reader :media, :media_type, :errors, :current_user
+  attr_reader :media, :media_type, :errors, :current_user, :tmdb_data
 
   def media_props # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     return {} unless media
@@ -52,7 +53,26 @@ class MediaShowPresenter < BasePresenter
       tmdb_vote_average: media['vote_average'],
       tmdb_vote_count: media['vote_count'],
       watchlist_status: watchlist_status
-    }
+    }.tap do |props|
+      props[:seasons] = format_seasons if media_type == 'Tv' && tmdb_data
+    end
+  end
+
+  def format_seasons
+    return [] unless tmdb_data['seasons']
+
+    tmdb_data['seasons']
+      .reject { |s| s['season_number'].zero? }
+      .map do |s|
+        {
+          season_number: s['season_number'],
+          name: s['name'],
+          episode_count: s['episode_count'],
+          air_date: s['air_date'],
+          poster_path: tmdb_poster_path(s['poster_path'], size: :small),
+          vote_average: s['vote_average']
+        }
+      end
   end
 
   def release_date(date)
@@ -92,7 +112,8 @@ class MediaShowPresenter < BasePresenter
 
     {
       id: watchlist_media_item.id,
-      watched: watchlist_media_item&.watched
+      watched: watchlist_media_item&.watched,
+      watched_episodes: watchlist_media_item&.watched_episodes || {}
     }
   end
 
@@ -101,7 +122,8 @@ class MediaShowPresenter < BasePresenter
 
     {
       id: partners_watchlist_media_item.id,
-      watched: partners_watchlist_media_item&.watched
+      watched: partners_watchlist_media_item&.watched,
+      watched_episodes: partners_watchlist_media_item&.watched_episodes || {}
     }
   end
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { api } from "../../lib/api-client";
 import { SearchIcon } from "../shared/icons";
 import PosterPlaceholder from "../shared/PosterPlaceholder";
+import { RefreshCw } from "lucide-react";
 
 export interface MediaProps {
   posterPath: string | null;
@@ -14,7 +15,11 @@ export interface SearchResponseProps {
   media: MediaProps[];
 }
 
-const Search: React.FC = () => {
+interface SearchProps {
+  savedImdbUserId?: string | null;
+}
+
+const Search: React.FC<SearchProps> = ({ savedImdbUserId }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [mediaResponse, setMediaResponse] = useState<SearchResponseProps>({
     media: [],
@@ -82,6 +87,24 @@ const Search: React.FC = () => {
             <p className="mt-4 text-theme-secondary text-lg">
               Search for movies and TV shows to add to your watchlist
             </p>
+
+            {savedImdbUserId ? (
+              <a
+                href="/watchlist/imdb-sync"
+                className="mt-6 flex items-center gap-2 px-5 py-3 bg-brand-accent hover:bg-brand-accent/90 text-white font-medium rounded-lg transition-colors"
+              >
+                <RefreshCw className="w-5 h-5" />
+                Sync IMDB Watchlist
+              </a>
+            ) : (
+              <a
+                href="/watchlist/imdb-sync"
+                className="mt-6 flex items-center gap-2 text-brand-muted hover:text-white transition-colors"
+              >
+                <RefreshCw className="w-4 h-4" />
+                <span className="text-sm">Import from IMDB</span>
+              </a>
+            )}
           </div>
         ) : mediaResponse.media.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 text-center">

@@ -30,17 +30,6 @@
   --input-bg: #3d3651;
 }
 
-:root.light {
-  --bg-primary: #f8f9fa;
-  --bg-secondary: #ffffff;
-  --bg-tertiary: #e9ecef;
-  --text-primary: #1F1E20;
-  --text-secondary: #4a4560;
-  --text-muted: #6c757d;
-  --border-color: #dee2e6;
-  --input-bg: #ffffff;
-}
-
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -49,7 +38,6 @@
   body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
-    transition: background-color 0.2s ease, color 0.2s ease;
   }
 }
 
@@ -142,11 +130,4 @@
     }
   }
 
-  .logo-theme-aware {
-    filter: none;
-  }
-}
-
-:root.light .logo-theme-aware {
-  filter: invert(1) brightness(0.2);
 }

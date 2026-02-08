@@ -15,8 +15,9 @@ class WatchlistMediaItemsController < ApplicationController
 
   def update
     watchlist_media_item = WatchlistMediaItem.find(params[:id])
+    partner_item = find_partners_item(watchlist_media_item.media_id)
 
-    [watchlist_media_item, partners_watchlist_media_item].each do |media_item|
+    [watchlist_media_item, partner_item].each do |media_item|
       next unless media_item
 
       media_item.update(watchlist_media_item_params)
@@ -25,6 +26,29 @@ class WatchlistMediaItemsController < ApplicationController
     render json: { success: true }
   rescue ActiveRecord::RecordInvalid => e
     render json: { success: false, message: e.errors.messages }
+  end
+
+  def toggle_episode
+    item = current_user.watchlist_media_items.find(params[:id])
+    season = params[:season_number].to_s
+    episode = params[:episode_number].to_i
+
+    episodes = item.watched_episodes || {}
+    season_episodes = episodes[season] || []
+
+    if season_episodes.include?(episode)
+      season_episodes.delete(episode)
+    else
+      season_episodes << episode
+    end
+
+    episodes[season] = season_episodes.sort
+    episodes.delete(season) if season_episodes.empty?
+
+    item.update!(watched_episodes: episodes)
+    render json: { watched_episodes: episodes }
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Not found' }, status: :not_found
   end
 
   def destroy
@@ -53,9 +77,9 @@ class WatchlistMediaItemsController < ApplicationController
     @media_to_save ||= Media.find_by(tmdb_id: params[:media_tmdb_id].to_i, type: media_type_params&.capitalize)
   end
 
-  def partners_watchlist_media_item
+  def find_partners_item(media_id)
     return unless current_user.watchlist_partner
 
-    @partners_watchlist_media_item ||= current_user.watchlist_partner.watchlist_media_items.find_by(media_id: media_to_save.id)
+    current_user.watchlist_partner.watchlist_media_items.find_by(media_id: media_id)
   end
 end

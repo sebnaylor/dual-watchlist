@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { SearchIcon, MoonIcon, SunIcon } from "./icons";
+import { SearchIcon } from "./icons";
 import { api } from "../../lib/api-client";
-import { useTheme } from "../../context/ThemeContext";
 
 export interface NavProps {
   searchPagePath: string;
@@ -19,7 +18,6 @@ const Nav: React.FC<NavProps> = ({
   transparent = false,
 }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { theme, toggleTheme } = useTheme();
 
   async function logout() {
     try {
@@ -52,17 +50,6 @@ const Nav: React.FC<NavProps> = ({
         </div>
 
         <div className="flex items-center gap-2 md:gap-4">
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-full hover:bg-white/10 transition-colors"
-            aria-label="Toggle theme"
-          >
-            {theme === "dark" ? (
-              <SunIcon height={24} width={24} />
-            ) : (
-              <MoonIcon height={24} width={24} />
-            )}
-          </button>
           <button
             onClick={() => (window.location.href = searchPagePath || "/search")}
             className="p-2 rounded-full hover:bg-white/10 transition-colors"
@@ -139,6 +126,18 @@ const Nav: React.FC<NavProps> = ({
               className="block px-4 py-3 rounded-lg text-theme-primary hover:bg-white/10 transition-colors"
             >
               Watchlist Connect
+            </a>
+            <a
+              href="/recommendations"
+              className="block px-4 py-3 rounded-lg text-theme-primary hover:bg-white/10 transition-colors"
+            >
+              Recommendations
+            </a>
+            <a
+              href="/watchlist/imdb-sync"
+              className="block px-4 py-3 rounded-lg text-theme-primary hover:bg-white/10 transition-colors"
+            >
+              Sync IMDB Watchlist
             </a>
             {userIsAdmin && (
               <a

@@ -1,33 +1,29 @@
 import React from "react";
 import Analytics from "../../components/analytics/index";
 
+interface UserStats {
+  name: string;
+  fullName: string;
+  image: string | null;
+  initials: string;
+  watchedMovieRuntime: number;
+  watchedMovieCount: number;
+  isCurrentUser: boolean;
+}
+
 interface AnalyticsPageProps {
   user: {
     joinCode: string;
   };
   hasWatchlistPartner: boolean;
   analytics: {
-    watchedItems: {
-      id: number;
+    users: UserStats[];
+    conclusion: {
       title: string;
-      watched: boolean;
-      runtime: number;
-      type: "Movie" | "TV";
-    }[];
-    chartData: {
-      watchedMovieRuntimeChart: {
-        title: string;
-        conclusion: {
-          title: string;
-          subtitle: string;
-          nextUserToWatchImage: string;
-          runtimeDifference: number;
-        };
-        data: {
-          value: number;
-          label: string;
-        }[];
-      };
+      subtitle: string;
+      nextUserToWatchImage: string | null;
+      nextUserToWatchInitials: string;
+      runtimeDifference: number;
     };
   };
 }

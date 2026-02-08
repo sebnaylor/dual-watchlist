@@ -22,7 +22,7 @@ export default function ForgotPassword({ errors }: ForgotPasswordProps) {
       <div className="w-full max-w-md">
         <div className="flex items-center gap-3 mb-8 justify-center">
           <img
-            className="w-12 h-12 logo-theme-aware"
+            className="w-12 h-12"
             src="https://dual-watchlist.s3.eu-north-1.amazonaws.com/logo.png"
             alt="logo"
           />

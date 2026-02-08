@@ -18,7 +18,7 @@
     <% if user_masquerade? %>
       <div class="bg-yellow-600 text-white text-center p-2 flex items-center justify-between">
         You are masquerading as <%= current_user.full_name %>
-        <%= link_to "Stop Masquerading", back_masquerade_path(current_user), class: "text-white underline primary-button" %>
+        <%= link_to "Stop Masquerading", back_masquerade_path(current_user), class: "text-white underline font-medium px-3 py-1 rounded bg-yellow-700 hover:bg-yellow-800" %>
       </div>
     <% end %>
     <%= yield %>

@@ -1,13 +1,15 @@
 import React, { ReactNode, createElement } from "react";
-import MediaPreview from "../../components/home/mediaPreview";
+import MediaCarousel from "../../components/home/MediaCarousel";
 import Watchlist from "../../components/home/watchlist";
-import { previewMovieTypes, watchlistTypes } from "../../components/home/types";
+import { PreviewMovie, watchlistTypes } from "../../components/home/types";
 import DefaultLayout from "../../components/layouts/DefaultLayout";
 import { NavProps } from "../../components/shared/Nav";
 
 export interface HomeProps {
-  previewMovie: previewMovieTypes;
+  previewMovies: PreviewMovie[];
   watchlistItems: watchlistTypes;
+  hasSharedWatchlist: boolean;
+  partnerName: string | null;
   nav: NavProps;
 }
 
@@ -15,12 +17,16 @@ interface HomeComponent extends React.FC<HomeProps> {
   layout?: (page: ReactNode) => React.ReactElement;
 }
 
-const Home: HomeComponent = ({ previewMovie, watchlistItems }) => {
+const Home: HomeComponent = ({ previewMovies, watchlistItems, hasSharedWatchlist, partnerName }) => {
   return (
     <>
-      <MediaPreview previewMovie={previewMovie} />
+      <MediaCarousel movies={previewMovies} />
       <div className="page-container section-spacing">
-        <Watchlist watchlistItems={watchlistItems} />
+        <Watchlist
+          watchlistItems={watchlistItems}
+          hasSharedWatchlist={hasSharedWatchlist}
+          partnerName={partnerName}
+        />
       </div>
     </>
   );

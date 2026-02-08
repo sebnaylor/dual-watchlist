@@ -38,6 +38,11 @@ export const api = {
       }),
     markWatched: (id: number, watched: boolean) =>
       apiClient.patch(`/watchlist_media_items/${id}.json`, { watched }),
+    toggleEpisode: (id: number, seasonNumber: number, episodeNumber: number) =>
+      apiClient.patch(`/watchlist_media_items/${id}/toggle_episode.json`, {
+        season_number: seasonNumber,
+        episode_number: episodeNumber,
+      }),
   },
   search: {
     query: (searchTerm: string) =>
@@ -53,6 +58,20 @@ export const api = {
   },
   auth: {
     signOut: () => apiClient.get("/users/sign_out"),
+  },
+  admin: {
+    generateMasqueradeToken: (userId: number) =>
+      apiClient.post<{ url: string }>("/admin/masquerade_tokens.json", {
+        user_id: userId,
+      }),
+  },
+  imdbSync: {
+    startSync: (imdbUserId: string) =>
+      apiClient.post("/watchlist/imdb-sync.json", { imdb_user_id: imdbUserId }),
+  },
+  media: {
+    getSeason: (tmdbId: number, seasonNumber: number) =>
+      apiClient.get(`/media/${tmdbId}/season/${seasonNumber}.json`),
   },
 };
 

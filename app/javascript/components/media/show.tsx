@@ -10,6 +10,7 @@ import {
 } from "../shared/icons";
 import Ratings from "../shared/Ratings";
 import Backdrop from "./backdrop";
+import SeasonsSection from "./SeasonsSection";
 import { api } from "../../lib/api-client";
 import classNames from "classnames";
 import "react-tooltip/dist/react-tooltip.css";
@@ -61,16 +62,26 @@ export interface MediaShowProps {
     tmdbId: number;
     tmdbVoteAverage: string | null;
     tmdbVoteCount: string | null;
+    seasons?: {
+      seasonNumber: number;
+      name: string;
+      episodeCount: number;
+      airDate: string | null;
+      posterPath: string | null;
+      voteAverage: number;
+    }[];
     watchlistStatus: {
       inPersonalWatchlist: boolean;
       personalWatchlistMediaItem: {
         id: number;
         watched: boolean;
+        watchedEpisodes?: Record<string, number[]>;
       };
       inSharedWatchlist: boolean;
       partnersWatchlistMediaItem: {
         id: number;
         watched: boolean;
+        watchedEpisodes?: Record<string, number[]>;
       };
       userImage: string;
       userInitials: string;
@@ -138,10 +149,10 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
     media.watchlistStatus.inSharedWatchlist;
 
   const tooltipText = () => {
-    if (media.type == "Tv") {
-      return "TV shows cannot be marked as watched. Once we add episodes, you might then";
-    } else if (!inAnyWatchlist) {
+    if (!inAnyWatchlist) {
       return "Add to your watchlist before marking as watched";
+    } else if (media.type == "Tv") {
+      return "Mark entire show as watched";
     } else if (!isWatched) {
       return "Press to mark as watched. It will appear in the Watchlist Connect page";
     }
@@ -224,10 +235,11 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
         type="secondary"
         pressed={isWatched}
         icon={<TvIcon height={20} width={20} />}
-        disabled={!inAnyWatchlist || media.type == "Tv"}
+        disabled={!inAnyWatchlist}
         onClick={() => {
           markAsWatchedOrUnWatched(
-            media.watchlistStatus.personalWatchlistMediaItem
+            media.watchlistStatus.personalWatchlistMediaItem ||
+              media.watchlistStatus.partnersWatchlistMediaItem
           );
         }}
       />
@@ -304,6 +316,20 @@ const MediaShow: React.FC<MediaShowProps> = ({ media, errors }) => {
             <hr className="border-theme" />
 
             {renderStreamOptions()}
+
+            {media.type === "Tv" &&
+              media.seasons &&
+              media.seasons.length > 0 && (
+                <>
+                  <hr className="border-theme" />
+                  <SeasonsSection
+                    tmdbId={media.tmdbId}
+                    seasons={media.seasons}
+                    watchlistMediaItemId={media.watchlistStatus.personalWatchlistMediaItem?.id}
+                    initialWatchedEpisodes={media.watchlistStatus.personalWatchlistMediaItem?.watchedEpisodes}
+                  />
+                </>
+              )}
           </div>
         </div>
 

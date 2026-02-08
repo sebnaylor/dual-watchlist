@@ -8,19 +8,22 @@ interface MediaItem {
   posterImg: string;
   mediaType: string;
   watched: boolean;
-  userImage?: string;
+  userImage?: string | null;
+  userInitials?: string;
 }
 
 interface MediaSectionProps {
   title: string;
   items: MediaItem[];
   showWatched?: boolean;
+  showUserAvatar?: boolean;
 }
 
 const MediaSection: React.FC<MediaSectionProps> = ({
   title,
   items,
   showWatched = false,
+  showUserAvatar = false,
 }) => {
   const filteredItems = items.filter((item) =>
     showWatched ? item.watched : !item.watched
@@ -43,6 +46,8 @@ const MediaSection: React.FC<MediaSectionProps> = ({
             posterImg={item.posterImg}
             mediaType={item.mediaType}
             userImage={item.userImage}
+            userInitials={item.userInitials}
+            showUserAvatar={showUserAvatar}
           />
         ))}
       </div>

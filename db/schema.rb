@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_01_24_044344) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_07_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,25 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_24_044344) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "imdb_watchlist_syncs", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "status", default: 0, null: false
+    t.integer "total_items", default: 0, null: false
+    t.integer "processed_items", default: 0, null: false
+    t.integer "successful_items", default: 0, null: false
+    t.integer "skipped_items", default: 0, null: false
+    t.integer "failed_items", default: 0, null: false
+    t.jsonb "results", default: []
+    t.jsonb "sync_errors", default: []
+    t.datetime "started_at"
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "imdb_user_id"
+    t.index ["user_id", "created_at"], name: "index_imdb_watchlist_syncs_on_user_id_and_created_at"
+    t.index ["user_id"], name: "index_imdb_watchlist_syncs_on_user_id"
   end
 
   create_table "media", force: :cascade do |t|
@@ -121,12 +140,14 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_24_044344) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "watched", default: false, null: false
+    t.jsonb "watched_episodes", default: {}
     t.index ["media_id"], name: "index_watchlist_media_items_on_media_id"
     t.index ["personal_watchlist_id"], name: "index_watchlist_media_items_on_personal_watchlist_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "imdb_watchlist_syncs", "users"
   add_foreign_key "personal_watchlists", "shared_watchlists"
   add_foreign_key "personal_watchlists", "users"
   add_foreign_key "watchlist_media_items", "media", column: "media_id"

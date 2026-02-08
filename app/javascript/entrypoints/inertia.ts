@@ -2,7 +2,7 @@ import { createInertiaApp } from "@inertiajs/react";
 import { createElement, ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import DefaultLayout from "../components/layouts/DefaultLayout";
-import { ThemeProvider } from "../context/ThemeContext";
+
 import { NavProps } from "../components/shared/Nav";
 
 interface PageProps {
@@ -40,7 +40,7 @@ createInertiaApp({
   setup({ el, App, props }) {
     if (el) {
       createRoot(el).render(
-        createElement(ThemeProvider, null, createElement(App, props))
+        createElement(App, props)
       );
     } else {
       console.error(

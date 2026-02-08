@@ -2,7 +2,10 @@
 
 class SearchController < ApplicationController
   def index
-    render inertia: 'search/index'
+    last_sync = current_user.imdb_watchlist_syncs.order(created_at: :desc).first
+    render inertia: 'search/index', props: {
+      saved_imdb_user_id: last_sync&.imdb_user_id
+    }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
   def query

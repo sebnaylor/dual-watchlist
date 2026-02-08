@@ -30,7 +30,6 @@ module Admin
           has_partner: user.personal_watchlist&.shared_watchlist_id.present?,
           watchlist_count: user.personal_watchlist&.media_items&.count || 0,
           watched_count: user.personal_watchlist&.media_items&.watched&.count || 0,
-          masquerade_path: masquerade_path(user)
         }
       end
     end
@@ -123,8 +122,5 @@ module Admin
       end
     end
 
-    def masquerade_path(user)
-      "/users/masquerade/#{user.id}"
-    end
   end
 end
